@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 7.3.7.2 (Linux)"/>
+	<meta name="created" content="2025-09-14T22:56:00.173078061"/>
+	<meta name="changed" content="2025-09-14T22:56:16.682130978"/>
+</head>
+<body lang="en-US" dir="ltr"><p>&lt;!DOCTYPE html&gt;</p>
+<p>&lt;html lang=&quot;vi&quot;&gt;</p>
+<p>&lt;head&gt;</p>
+<p>    &lt;meta charset=&quot;UTF-8&quot;&gt;</p>
+<p>    &lt;meta name=&quot;viewport&quot;
+content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</p>
+<p>    &lt;title&gt;iFactory - Hệ thống Quản lý Sản
+xuất&lt;/title&gt;</p>
+<p>    &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;</p>
+<p>    &lt;script
+src=&quot;https://cdn.jsdelivr.net/npm/chart.js&quot;&gt;&lt;/script&gt;</p>
+<p>    &lt;link rel=&quot;preconnect&quot;
+href=&quot;https://fonts.googleapis.com&quot;&gt;</p>
+<p>    &lt;link rel=&quot;preconnect&quot;
+href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;</p>
+<p>    &lt;link
+href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot;
+rel=&quot;stylesheet&quot;&gt;</p>
+<p>    &lt;script
+src=&quot;https://unpkg.com/@phosphor-icons/web&quot;&gt;&lt;/script&gt;</p>
+<p>    
+</p>
+<p>    &lt;style&gt;</p>
+<p>        :root {</p>
+<p>            --brand-primary: #0D47A1; --brand-primary-hover:
+#0B3A80; --brand-secondary: #E3F2FD;</p>
+<p>            --text-primary: #1e293b; --text-secondary: #64748b;</p>
+<p>            --bg: #f1f5f9; --panel: #ffffff; --text:
+var(--text-primary); --muted: var(--text-secondary);</p>
+<p>            --primary: var(--brand-primary); --danger: #dc2626;
+--grid: #e5e7eb; --chip: var(--brand-secondary);</p>
+<p>            --focus: #1d4ed8; --warning: #f59e0b; --success:
+#16a34a; --radius: 10px;</p>
+<p>            --shadow: 0 4px 12px rgba(0,0,0,.08); --station-h:
+72px; --track-h: 56px; --col-w: 80px;</p>
+<p>        }</p>
+<p>        
+</p>
+<p>        body { font-family: 'Inter', sans-serif; background-color:
+var(--bg); color: var(--text); }</p>
+<p>        .app-container { display: flex; height: 100vh; }</p>
+<p>        .sidebar { background-color: var(--brand-primary);
+transition: width 0.3s ease-in-out; }</p>
+<p>        .sidebar-link { display: flex; align-items: center;
+padding: 0.75rem 1.25rem; white-space: nowrap; border-radius:
+0.375rem; color: #BBDEFB; transition: all 0.2s; font-weight: 500; }</p>
+<p>        .sidebar-link:hover { background-color:
+var(--brand-primary-hover); color: #ffffff; }</p>
+<p>        .sidebar-link.active { background-color: #ffffff; color:
+var(--brand-primary); font-weight: 600; }</p>
+<p>        .sidebar-link i { font-size: 1.25rem; margin-right:
+0.75rem; flex-shrink: 0; }</p>
+<p>        
+</p>
+<p>        .sidebar-collapsed .sidebar { width: 80px; }</p>
+<p>        .sidebar-collapsed .sidebar-link span, .sidebar-collapsed
+.sidebar-header-text, .sidebar-collapsed .user-info,
+.sidebar-collapsed .config-header { display: none; }</p>
+<p>        .sidebar-collapsed .sidebar-link, .sidebar-collapsed
+.sidebar-header { justify-content: center; }</p>
+<p>        .sidebar-collapsed .sidebar-link i { margin-right: 0; }</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        .page { display: none; }</p>
+<p>        .page.active { display: block; animation: fadeIn 0.3s; }</p>
+<p>        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1;
+} }</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        .schedule-view { display: none; }</p>
+<p>        .schedule-view.active { display: block; }</p>
+<p>        
+</p>
+<p>        .tab-btn { padding: 0.75rem 1rem; font-size: 0.875rem;
+font-weight: 600; border-bottom: 2px solid transparent; color:
+var(--text-secondary); cursor: pointer; }</p>
+<p>        .tab-btn.active { color: var(--brand-primary);
+border-bottom-color: var(--brand-primary); }</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        .panel { background: var(--panel); border-radius:
+var(--radius); box-shadow: var(--shadow); padding: 16px;
+margin-bottom: 16px; border: 1px solid var(--grid); }</p>
+<p>        .field{display:flex;flex-direction:column;gap:6px}</p>
+<p>        .label{font-size:12px;color:var(--muted)}</p>
+<p>        .input, .select{ height:36px;border:1px solid
+#d1d5db;border-radius:8px;padding:0 10px;background:#fff;
+outline:none; font-size: 14px; }</p>
+<p>        .input:focus,
+.select:focus{border-color:var(--focus);box-shadow:0 0 0 3px
+rgba(29,78,216,.15)}</p>
+<p>        .toolbar{
+display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:12px;flex-wrap:wrap;
+}</p>
+<p>        .left, .right{display:flex;align-items:center;gap:8px}</p>
+<p>        .btn{ height:36px;padding:0
+12px;border-radius:8px;border:1px solid
+#d1d5db;background:#fff;cursor:pointer;
+display:inline-flex;align-items:center;gap:8px;font-weight:600; }</p>
+<p>       
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}</p>
+<p>       
+.btn.ghost{background:transparent;border-color:transparent;color:#374151}</p>
+<p>        .segmented{ display:inline-flex;border:1px solid
+#d1d5db;border-radius:10px;overflow:hidden; }</p>
+<p>        .segmented button{ height:36px;padding:0
+12px;border:0;background:#fff;cursor:pointer;font-weight:600; }</p>
+<p>        .segmented
+button.active{background:var(--chip);color:var(--focus)}</p>
+<p>        .date{
+display:inline-flex;align-items:center;gap:4px;border:1px solid
+#d1d5db;border-radius:8px;height:36px;background:#fff; }</p>
+<p>        .date input { border: none !important; box-shadow: none
+!important; text-align: center; }</p>
+<p>        
+</p>
+<p>        .schedule{
+background:var(--panel);border-radius:var(--radius);box-shadow:var(--shadow);
+overflow:hidden; border: 1px solid var(--grid); }</p>
+<p>        .schedule-head{ display:grid; grid-template-columns:240px
+1fr; border-bottom:1px solid var(--grid); background: #f8fafc; }</p>
+<p>        .stations-head{ padding:12px
+16px;font-weight:700;color:#1f2937;border-right:1px solid
+var(--grid); }</p>
+<p>        .timehead{
+position:relative;overflow:hidden;white-space:nowrap; }</p>
+<p>        .time-grid{ display:flex;position:relative; }</p>
+<p>        .time-col{
+width:var(--col-w);min-width:var(--col-w);border-left:1px solid
+var(--grid); padding:8px
+0;text-align:center;color:var(--muted);font-size:12px; }</p>
+<p>        .schedule-body{ display:grid;grid-template-columns:240px
+1fr;max-height:66vh;overflow:auto; }</p>
+<p>        .stations{ border-right:1px solid
+var(--grid);background:#fdfdff; }</p>
+<p>        .station{
+height:var(--station-h);display:flex;align-items:center;gap:8px;padding:0
+16px;border-bottom:1px solid var(--grid); }</p>
+<p>        .badge{
+background:var(--chip);color:#3730a3;font-weight:700;border-radius:999px;padding:4px
+10px;font-size:12px; }</p>
+<p>        .station-sub{color:var(--muted);font-size:12px}</p>
+<p>        
+</p>
+<p>        .tracks{ position:relative; }</p>
+<p>        .track{
+position:relative;height:var(--station-h);border-bottom:1px solid
+var(--grid); }</p>
+<p>        .track-timeline { background: repeating-linear-gradient(
+to right, transparent 0 calc(var(--col-w) - 1px), #f6f8fb
+calc(var(--col-w) - 1px) var(--col-w)); }</p>
+<p>        .track.drop-hover { background-color: #e0e7ff; }</p>
+<p>        .unscheduled-track { display: flex; flex-wrap: wrap;
+align-content: flex-start; gap: 8px; padding: 8px; min-height:
+var(--station-h); }</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        .now{
+position:absolute;top:0;bottom:0;width:2px;background:var(--danger);box-shadow:0
+0 0 2px rgba(220,38,38,.15); z-index:5;pointer-events:none; }</p>
+<p>        
+</p>
+<p>        .order {
+position:absolute;height:var(--track-h);top:8px;border-radius:8px;display:flex;align-items:center;
+padding:8px 10px;gap:8px;color:#fff;font-weight:600;box-shadow:0 4px
+14px rgba(0,0,0,.15);cursor:pointer; user-select: none; }</p>
+<p>        .order.dragging { opacity: 0.5; }</p>
+<p>        
+</p>
+<p>       
+.order.blue{background:linear-gradient(135deg,#2563eb,#1d4ed8)}</p>
+<p>       
+.order.red{background:linear-gradient(135deg,#ef4444,#dc2626)}</p>
+<p>       
+.order.yellow{background:linear-gradient(135deg,#f59e0b,#d97706)}</p>
+<p>       
+.order.green{background:linear-gradient(135deg,#16a34a,#15803d)}</p>
+<p>        .order.grey
+{background:linear-gradient(135deg,#94a3b8,#64748b)}</p>
+<p>        
+</p>
+<p>        .modal { background-color: rgba(0,0,0,0.5); z-index: 100;
+}</p>
+<p>        .modal-content { animation: slideInUp 0.3s ease-out; }</p>
+<p>        @keyframes slideInUp { from { transform: translateY(20px);
+opacity: 0; } to { transform: translateY(0); opacity: 1; } }</p>
+<p>        
+</p>
+<p>        .status-badge { padding: 4px 10px; border-radius: 999px;
+font-size: 11px; font-weight: 700; text-align: center; display:
+inline-block; }</p>
+<p>        .status-badge.grey { background-color: #f1f5f9; color:
+#475569; border: 1px solid #e2e8f0; }</p>
+<p>        .status-badge.blue { background-color: #dbeafe; color:
+#2563eb; }</p>
+<p>        .status-badge.yellow { background-color: #fef9c3; color:
+#ca8a04; }</p>
+<p>        .status-badge.red { background-color: #fee2e2; color:
+#dc2626; }</p>
+<p>        .status-badge.green { background-color: #dcfce7; color:
+#16a34a; }</p>
+<p>        
+</p>
+<p>        .plan-table th, .work-schedule-table th { padding: 8px
+12px; }</p>
+<p>        .plan-table td, .work-schedule-table td { padding: 10px
+12px; white-space: nowrap; }</p>
+<p>        .plan-table .month-row { cursor: pointer; }</p>
+<p>        .plan-table .month-row:hover { background-color: #f8fafc;
+}</p>
+<p>        .plan-table .month-row i { transition: transform 0.2s; }</p>
+<p>        .plan-table .month-row.collapsed i { transform:
+rotate(-90deg); }</p>
+<p>        .plan-table .metric-row-l2 { padding-left: 2.5rem
+!important; }</p>
+<p>        .plan-table .metric-row-l3 { padding-left: 4rem
+!important; }</p>
+<p>        .plan-table .total-row td { font-weight: 700; color:
+var(--brand-primary); }</p>
+<p>    &lt;/style&gt;</p>
+<p>&lt;/head&gt;</p>
+<p>&lt;body class=&quot;&quot;&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>    &lt;div class=&quot;app-container&quot;&gt;</p>
+<p>        &lt;aside class=&quot;sidebar w-64 text-white p-4 flex
+flex-col shrink-0&quot;&gt;</p>
+<p>            &lt;div class=&quot;sidebar-header flex items-center
+mb-10&quot;&gt;</p>
+<p>                &lt;i class=&quot;ph-bold ph-factory text-3xl
+text-white&quot;&gt;&lt;/i&gt;</p>
+<p>                &lt;span class=&quot;sidebar-header-text text-2xl
+font-bold ml-2&quot;&gt;iFactory&lt;/span&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p>            &lt;nav class=&quot;flex flex-col space-y-2&quot;&gt;</p>
+<p>                &lt;a href=&quot;#&quot; class=&quot;sidebar-link
+active&quot; data-page=&quot;dashboard&quot;&gt;&lt;i class=&quot;ph
+ph-gauge&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Dashboard&lt;/span&gt;&lt;/a&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>                &lt;div&gt;</p>
+<p>                    &lt;span class=&quot;config-header px-5 pt-6
+pb-2 text-xs font-semibold text-blue-200 uppercase
+tracking-wider&quot;&gt;Cấu hình&lt;/span&gt;</p>
+<p>                    &lt;div class=&quot;flex flex-col space-y-2
+mt-2&quot;&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;item-master&quot;&gt;&lt;i
+class=&quot;ph ph-package&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Danh mục hàng hóa&lt;/span&gt;&lt;/a&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;bom-config&quot;&gt;&lt;i
+class=&quot;ph ph-list-bullets&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Cấu hình BOM&lt;/span&gt;&lt;/a&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;station-config&quot;&gt;&lt;i
+class=&quot;ph ph-robot&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Cấu hình Trạm SX&lt;/span&gt;&lt;/a&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;inventory-update&quot;&gt;&lt;i
+class=&quot;ph ph-stack&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Cập nhật tồn kho&lt;/span&gt;&lt;/a&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>                &lt;div&gt;</p>
+<p>                    &lt;span class=&quot;config-header px-5 pt-6
+pb-2 text-xs font-semibold text-blue-200 uppercase tracking-wider&quot;&gt;Kế
+hoạch sản xuất&lt;/span&gt;</p>
+<p>                    &lt;div class=&quot;flex flex-col space-y-2
+mt-2&quot;&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;production-plan&quot;&gt;&lt;i
+class=&quot;ph ph-calendar-plus&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Kế hoạch sản xuất&lt;/span&gt;&lt;/a&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;order-list&quot;&gt;&lt;i
+class=&quot;ph ph-notepad&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Lệnh sản xuất&lt;/span&gt;&lt;/a&gt;</p>
+<p>                        &lt;a href=&quot;#&quot;
+class=&quot;sidebar-link&quot; data-page=&quot;scheduling&quot;&gt;&lt;i
+class=&quot;ph ph-calendar-check&quot;&gt;&lt;/i&gt;&lt;span
+class=&quot;link-text&quot;&gt;Lập lịch sản xuất&lt;/span&gt;&lt;/a&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p>            &lt;/nav&gt;</p>
+<p>            &lt;div class=&quot;mt-auto&quot;&gt;</p>
+<p>                &lt;div class=&quot;user-profile flex items-center
+p-3 bg-black bg-opacity-20 rounded-lg&quot;&gt;</p>
+<p>                    &lt;img
+src=&quot;https://placehold.co/40x40/BBDEFB/0D47A1?text=QM&quot;
+alt=&quot;Avatar&quot; class=&quot;rounded-full flex-shrink-0&quot;&gt;</p>
+<p>                    &lt;div class=&quot;user-info ml-3&quot;&gt;&lt;p
+class=&quot;font-semibold text-sm text-white&quot;&gt;Quang
+Minh&lt;/p&gt;&lt;p class=&quot;text-xs text-blue-200&quot;&gt;Quản
+lý Sản xuất&lt;/p&gt;&lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p>                &lt;button id=&quot;sidebarToggle&quot;
+class=&quot;w-full mt-4 flex items-center justify-center p-2
+rounded-lg hover:bg-black hover:bg-opacity-20 transition-colors&quot;&gt;</p>
+<p>                    &lt;i class=&quot;ph ph-caret-double-left
+text-xl&quot;&gt;&lt;/i&gt;</p>
+<p>                &lt;/button&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p>        &lt;/aside&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        &lt;main class=&quot;flex-1 p-6 overflow-y-auto&quot;&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>            &lt;div id=&quot;dashboard&quot; class=&quot;page
+active&quot;&gt;</p>
+<p>                 &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-2&quot;&gt;Báo cáo Tiến độ Sản
+xuất&lt;/h1&gt;</p>
+<p>                 &lt;p class=&quot;text-text-secondary mb-6&quot;&gt;Tổng
+quan về hiệu suất và tiến độ sản xuất trong nhà
+máy.&lt;/p&gt;</p>
+<p>                 &lt;div class=&quot;grid grid-cols-1
+md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6&quot;&gt;</p>
+<p>                     &lt;div class=&quot;bg-white p-5 rounded-lg
+border border-slate-200 shadow-sm&quot;&gt;&lt;h3 class=&quot;text-sm
+font-medium text-text-secondary&quot;&gt;Hiệu suất (OEE)&lt;/h3&gt;&lt;p
+class=&quot;text-3xl font-bold text-green-600 mt-2&quot;&gt;85.6%&lt;/p&gt;&lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;bg-white p-5 rounded-lg
+border border-slate-200 shadow-sm&quot;&gt;&lt;h3 class=&quot;text-sm
+font-medium text-text-secondary&quot;&gt;Tổng sản lượng&lt;/h3&gt;&lt;p
+class=&quot;text-3xl font-bold text-blue-700 mt-2&quot;&gt;12,480
+&lt;span class=&quot;text-lg font-medium
+text-text-secondary&quot;&gt;sp&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;bg-white p-5 rounded-lg
+border border-slate-200 shadow-sm&quot;&gt;&lt;h3 class=&quot;text-sm
+font-medium text-text-secondary&quot;&gt;Lệnh sản xuất&lt;/h3&gt;&lt;p
+class=&quot;text-3xl font-bold text-text-primary mt-2&quot;&gt;42
+&lt;span class=&quot;text-lg font-medium text-text-secondary&quot;&gt;/
+50&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;bg-white p-5 rounded-lg
+border border-slate-200 shadow-sm&quot;&gt;&lt;h3 class=&quot;text-sm
+font-medium text-text-secondary&quot;&gt;Tỷ lệ lỗi&lt;/h3&gt;&lt;p
+class=&quot;text-3xl font-bold text-red-600 mt-2&quot;&gt;1.2%&lt;/p&gt;&lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>                 &lt;div class=&quot;grid grid-cols-1
+lg:grid-cols-5 gap-6&quot;&gt;</p>
+<p>                     &lt;div class=&quot;lg:col-span-3 bg-white
+p-6 rounded-lg border border-slate-200 shadow-sm&quot;&gt;&lt;h3
+class=&quot;text-lg font-semibold text-text-primary mb-4&quot;&gt;Sản
+lượng theo Trạm sản xuất&lt;/h3&gt;&lt;div
+class=&quot;h-80&quot;&gt;&lt;canvas
+id=&quot;productionByStationChart&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;lg:col-span-2 bg-white
+p-6 rounded-lg border border-slate-200 shadow-sm&quot;&gt;&lt;h3
+class=&quot;text-lg font-semibold text-text-primary mb-4&quot;&gt;Trạng
+thái lệnh sản xuất&lt;/h3&gt;&lt;div class=&quot;h-80&quot;&gt;&lt;canvas
+id=&quot;orderStatusChart&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>            &lt;div id=&quot;scheduling&quot; class=&quot;page&quot;&gt;</p>
+<p>                 &lt;div class=&quot;border-b border-gray-200 mb-4
+flex justify-between items-center&quot;&gt;</p>
+<p>                     &lt;div class=&quot;flex space-x-4&quot;&gt;</p>
+<p>                         &lt;button class=&quot;tab-btn active&quot;
+data-view=&quot;gantt-view&quot;&gt;Lịch sản xuất&lt;/button&gt;</p>
+<p>                         &lt;button class=&quot;tab-btn&quot;
+data-view=&quot;kanban-view&quot;&gt;Danh sách chi tiết&lt;/button&gt;</p>
+<p>                     &lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>                 &lt;div class=&quot;panel !py-3 !px-4 mb-4&quot;&gt;</p>
+<p>                    &lt;div class=&quot;flex items-center gap-x-6
+gap-y-2 flex-wrap&quot;&gt;</p>
+<p>                        &lt;span class=&quot;font-semibold text-sm
+mr-2&quot;&gt;Chú giải:&lt;/span&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;&lt;div class=&quot;w-3 h-3 rounded-full
+bg-slate-300&quot;&gt;&lt;/div&gt;&lt;span class=&quot;text-xs
+font-medium text-slate-600&quot;&gt;Chưa xếp lịch&lt;/span&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;&lt;div class=&quot;w-3 h-3 rounded-full
+bg-slate-500&quot;&gt;&lt;/div&gt;&lt;span class=&quot;text-xs
+font-medium text-slate-600&quot;&gt;Chưa bắt đầu&lt;/span&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;&lt;div class=&quot;w-3 h-3 rounded-full
+bg-blue-600&quot;&gt;&lt;/div&gt;&lt;span class=&quot;text-xs
+font-medium text-slate-600&quot;&gt;Đang thực hiện&lt;/span&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;&lt;div class=&quot;w-3 h-3 rounded-full
+bg-yellow-500&quot;&gt;&lt;/div&gt;&lt;span class=&quot;text-xs
+font-medium text-slate-600&quot;&gt;Cảnh báo&lt;/span&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;&lt;div class=&quot;w-3 h-3 rounded-full
+bg-red-600&quot;&gt;&lt;/div&gt;&lt;span class=&quot;text-xs
+font-medium text-slate-600&quot;&gt;Chậm tiến độ&lt;/span&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;&lt;div class=&quot;w-3 h-3 rounded-full
+bg-green-600&quot;&gt;&lt;/div&gt;&lt;span class=&quot;text-xs
+font-medium text-slate-600&quot;&gt;Hoàn thành&lt;/span&gt;&lt;/div&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>                 &lt;div id=&quot;gantt-view&quot;
+class=&quot;schedule-view active&quot;&gt;</p>
+<p>                     &lt;section class=&quot;panel&quot;&gt;</p>
+<p>                         &lt;div class=&quot;grid grid-cols-1
+xl:grid-cols-3 gap-4&quot;&gt;</p>
+<p>                             &lt;div class=&quot;xl:col-span-2
+grid grid-cols-1 md:grid-cols-3 gap-4&quot;&gt;</p>
+<p>                                 &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot; for=&quot;dvcs&quot;&gt;Mã
+ĐVCS&lt;/label&gt;&lt;input id=&quot;dvcs&quot; class=&quot;input&quot;
+value=&quot;004&quot; /&gt;&lt;/div&gt;</p>
+<p>                                 &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot; for=&quot;soct&quot;&gt;Số CT&lt;/label&gt;&lt;input
+id=&quot;soct&quot; class=&quot;input&quot; placeholder=&quot;VD:
+004-WO1-...&quot; /&gt;&lt;/div&gt;</p>
+<p>                                 &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot; for=&quot;phanxuong&quot;&gt;Phân
+xưởng&lt;/label&gt;&lt;select id=&quot;phanxuong&quot;
+class=&quot;select&quot;&gt;&lt;option&gt;PX1&lt;/option&gt;&lt;option&gt;PX2&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                                 &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot; for=&quot;to&quot;&gt;Mã tổ&lt;/label&gt;&lt;input
+id=&quot;to&quot; class=&quot;input&quot; placeholder=&quot;VD: TO01&quot;
+/&gt;&lt;/div&gt;</p>
+<p>                                 &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot; for=&quot;ngay&quot;&gt;Ngày kế
+hoạch&lt;/label&gt;&lt;input id=&quot;ngay&quot; type=&quot;date&quot;
+class=&quot;input&quot; /&gt;&lt;/div&gt;</p>
+<p>                                 &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot; for=&quot;trangthai&quot;&gt;Trạng
+thái&lt;/label&gt;&lt;select id=&quot;trangthai&quot;
+class=&quot;select&quot;&gt;&lt;option value=&quot;all&quot;&gt;Tất
+cả&lt;/option&gt;&lt;option value=&quot;blue&quot;&gt;Đang
+làm&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                             &lt;/div&gt;</p>
+<p>                              &lt;div class=&quot;flex flex-col
+justify-between&quot;&gt;</p>
+<p>                                 &lt;div class=&quot;flex
+items-center gap-2&quot;&gt;</p>
+<p>                                     &lt;button class=&quot;btn
+primary flex-1&quot; id=&quot;addOrderBtn&quot;&gt;&lt;i class=&quot;ph
+ph-plus&quot;&gt;&lt;/i&gt; Thêm Lệnh Mới&lt;/button&gt;</p>
+<p>                                     &lt;div class=&quot;date&quot;&gt;</p>
+<p>                                         &lt;button class=&quot;btn
+ghost&quot; id=&quot;prevDay&quot;&gt;◀&lt;/button&gt;</p>
+<p>                                         &lt;input type=&quot;date&quot;
+class=&quot;input !h-auto&quot; id=&quot;dateHead&quot; /&gt;</p>
+<p>                                         &lt;button class=&quot;btn
+ghost&quot; id=&quot;nextDay&quot;&gt;▶&lt;/button&gt;</p>
+<p>                                     &lt;/div&gt;</p>
+<p>                                 &lt;/div&gt;</p>
+<p>                                  &lt;div class=&quot;segmented
+w-full mt-2&quot;&gt;</p>
+<p>                                     &lt;button class=&quot;active
+w-full&quot; data-range=&quot;24h&quot;&gt;24h&lt;/button&gt;</p>
+<p>                                     &lt;button class=&quot;w-full&quot;
+data-range=&quot;shift1&quot;&gt;Ca 1&lt;/button&gt;</p>
+<p>                                     &lt;button class=&quot;w-full&quot;
+data-range=&quot;shift2&quot;&gt;Ca 2&lt;/button&gt;</p>
+<p>                                     &lt;button class=&quot;w-full&quot;
+data-range=&quot;shift3&quot;&gt;Ca 3&lt;/button&gt;</p>
+<p>                                 &lt;/div&gt;</p>
+<p>                             &lt;/div&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                     &lt;/section&gt;</p>
+<p>                     &lt;section class=&quot;schedule&quot;&gt;</p>
+<p>                           &lt;div class=&quot;toolbar !mt-0 p-2
+border-b justify-end&quot;&gt;</p>
+<p>                             &lt;div class=&quot;right flex
+items-center gap-4&quot;&gt;</p>
+<p>                                 &lt;div class=&quot;zoom&quot;&gt;</p>
+<p>                                     &lt;span class=&quot;label&quot;&gt;Thu
+phóng&lt;/span&gt;</p>
+<p>                                     &lt;input type=&quot;range&quot;
+id=&quot;zoom&quot; min=&quot;60&quot; max=&quot;140&quot; step=&quot;4&quot;
+value=&quot;100&quot; class=&quot;w-24 md:w-40&quot;&gt;</p>
+<p>                                 &lt;/div&gt;</p>
+<p>                             &lt;/div&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                         &lt;div class=&quot;schedule-head&quot;&gt;</p>
+<p>                             &lt;div class=&quot;stations-head&quot;&gt;Trạm
+sản xuất&lt;/div&gt;</p>
+<p>                             &lt;div class=&quot;timehead&quot;
+id=&quot;timeHeadScroll&quot;&gt;&lt;div class=&quot;time-grid&quot;
+id=&quot;timeGrid&quot;&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                         &lt;div class=&quot;schedule-body&quot;&gt;</p>
+<p>                             &lt;div class=&quot;stations&quot;
+id=&quot;stations&quot;&gt;&lt;/div&gt;</p>
+<p>                             &lt;div class=&quot;tracks&quot;
+id=&quot;tracks&quot;&gt;&lt;div class=&quot;now&quot;
+id=&quot;nowMarker&quot;&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                     &lt;/section&gt;</p>
+<p>                     &lt;section id=&quot;unscheduled-panel&quot;
+class=&quot;panel mt-4&quot;&gt;</p>
+<p>                         &lt;h3 class=&quot;font-semibold
+text-text-primary mb-3&quot;&gt;Lệnh sản xuất chưa xếp
+lịch&lt;/h3&gt;</p>
+<p>                         &lt;div id=&quot;unscheduled-dropzone&quot;
+class=&quot;unscheduled-track bg-slate-50 border border-dashed
+rounded-lg&quot;&gt;&lt;/div&gt;</p>
+<p>                     &lt;/section&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>                 &lt;div id=&quot;kanban-view&quot;
+class=&quot;schedule-view&quot;&gt;</p>
+<p>                      &lt;div class=&quot;grid grid-cols-1
+md:grid-cols-2 lg:grid-cols-4 gap-4&quot;&gt;</p>
+<p>                          &lt;div&gt;</p>
+<p>                            &lt;h3 class=&quot;font-semibold
+text-slate-700 mb-4&quot;&gt;Chưa xếp lịch (&lt;span
+id=&quot;kanban-count-unscheduled&quot;&gt;0&lt;/span&gt;)&lt;/h3&gt;</p>
+<p>                            &lt;div id=&quot;kanban-col-unscheduled&quot;
+class=&quot;space-y-3 min-h-[100px] bg-slate-100 p-2
+rounded-lg&quot;&gt;&lt;/div&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                          &lt;div&gt;</p>
+<p>                            &lt;h3 class=&quot;font-semibold
+text-slate-700 mb-4&quot;&gt;Chưa bắt đầu (&lt;span
+id=&quot;kanban-count-grey&quot;&gt;0&lt;/span&gt;)&lt;/h3&gt;</p>
+<p>                            &lt;div id=&quot;kanban-col-grey&quot;
+class=&quot;space-y-3 min-h-[100px] bg-slate-100 p-2
+rounded-lg&quot;&gt;&lt;/div&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                          &lt;div&gt;</p>
+<p>                            &lt;h3 class=&quot;font-semibold
+text-slate-700 mb-4&quot;&gt;Đang làm &amp; Cần chú ý (&lt;span
+id=&quot;kanban-count-active&quot;&gt;0&lt;/span&gt;)&lt;/h3&gt;</p>
+<p>                            &lt;div id=&quot;kanban-col-active&quot;
+class=&quot;space-y-3 min-h-[100px] bg-slate-100 p-2
+rounded-lg&quot;&gt;&lt;/div&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                          &lt;div&gt;</p>
+<p>                            &lt;h3 class=&quot;font-semibold
+text-slate-700 mb-4&quot;&gt;Hoàn thành (&lt;span
+id=&quot;kanban-count-green&quot;&gt;0&lt;/span&gt;)&lt;/h3&gt;</p>
+<p>                            &lt;div id=&quot;kanban-col-green&quot;
+class=&quot;space-y-3 min-h-[100px] bg-slate-100 p-2
+rounded-lg&quot;&gt;&lt;/div&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                      &lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p>            
+</p>
+<p>            &lt;div id=&quot;bom-config&quot; class=&quot;page&quot;&gt;</p>
+<p>                 &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-6&quot;&gt;Cấu hình BOM (Định mức nguyên
+vật liệu)&lt;/h1&gt;</p>
+<p>                 &lt;div class=&quot;grid grid-cols-1
+md:grid-cols-3 gap-6&quot;&gt;</p>
+<p>                     &lt;div class=&quot;md:col-span-1 bg-white
+p-4 rounded-lg border&quot;&gt;</p>
+<p>                         &lt;div class=&quot;flex justify-between
+items-center mb-2&quot;&gt;</p>
+<p>                             &lt;h2 class=&quot;text-lg
+font-semibold&quot;&gt;Danh sách thành phẩm&lt;/h2&gt;</p>
+<p>                             &lt;button id=&quot;addBomBtn&quot;
+class=&quot;btn primary text-sm !h-9&quot;&gt;&lt;i class=&quot;ph
+ph-plus&quot;&gt;&lt;/i&gt;Thêm&lt;/button&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                         &lt;input type=&quot;search&quot;
+id=&quot;bomSearch&quot; class=&quot;input w-full mb-4&quot;
+placeholder=&quot;Tìm theo mã hoặc tên...&quot;&gt;</p>
+<p>                         &lt;div id=&quot;productList&quot;
+class=&quot;flex flex-col space-y-2 max-h-[60vh]
+overflow-y-auto&quot;&gt;&lt;/div&gt;</p>
+<p>                     &lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;md:col-span-2 bg-white
+p-4 rounded-lg border&quot;&gt;</p>
+<p>                          &lt;div id=&quot;bomDetailView&quot;
+class=&quot;hidden&quot;&gt;</p>
+<p>                             &lt;div class=&quot;flex
+justify-between items-center mb-4&quot;&gt;</p>
+<p>                                 &lt;div&gt;</p>
+<p>                                     &lt;h2 class=&quot;text-lg
+font-semibold&quot;&gt;BOM cho: &lt;span id=&quot;bomProductName&quot;
+class=&quot;text-blue-700&quot;&gt;&lt;/span&gt;&lt;/h2&gt;</p>
+<p>                                     &lt;p class=&quot;text-sm
+text-gray-500&quot;&gt;Mã: &lt;span id=&quot;bomProductCode&quot;&gt;&lt;/span&gt;&lt;/p&gt;</p>
+<p>                                 &lt;/div&gt;</p>
+<p>                                 &lt;button id=&quot;editBomBtn&quot;
+class=&quot;btn text-sm !h-9&quot;&gt;&lt;i class=&quot;ph
+ph-pencil-simple&quot;&gt;&lt;/i&gt;Sửa&lt;/button&gt;</p>
+<p>                             &lt;/div&gt;</p>
+<p>                             &lt;table class=&quot;w-full text-sm
+text-left&quot;&gt;</p>
+<p>                                 &lt;thead class=&quot;bg-slate-50
+text-xs uppercase&quot;&gt;&lt;tr&gt;&lt;th class=&quot;p-2&quot;&gt;Mã
+NVL&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;Tên Nguyên vật
+liệu&lt;/th&gt;&lt;th class=&quot;p-2&quot;&gt;Số lượng&lt;/th&gt;&lt;th
+class=&quot;p-2&quot;&gt;Đơn vị&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p>                                 &lt;tbody
+id=&quot;bomComponentList&quot;&gt;&lt;/tbody&gt;</p>
+<p>                             &lt;/table&gt;</p>
+<p>                        &lt;/div&gt;</p>
+<p>                         &lt;div id=&quot;bomEmptyView&quot;
+class=&quot;text-center text-gray-500 py-10&quot;&gt;&lt;p&gt;Chọn
+một thành phẩm để xem BOM.&lt;/p&gt;&lt;/div&gt;</p>
+<p>                     &lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>            &lt;div id=&quot;station-config&quot; class=&quot;page&quot;&gt;</p>
+<p>                 &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-6&quot;&gt;Cấu hình Trạm sản xuất&lt;/h1&gt;</p>
+<p>                 &lt;div class=&quot;grid grid-cols-1
+md:grid-cols-3 gap-6&quot;&gt;</p>
+<p>                      &lt;div class=&quot;md:col-span-1 bg-white
+p-4 rounded-lg border&quot;&gt;</p>
+<p>                          &lt;div class=&quot;flex justify-between
+items-center mb-2&quot;&gt;</p>
+<p>                              &lt;h2 class=&quot;text-lg
+font-semibold&quot;&gt;Danh sách trạm&lt;/h2&gt;</p>
+<p>                              &lt;button id=&quot;addStationBtn&quot;
+class=&quot;btn primary text-sm !h-9&quot;&gt;&lt;i class=&quot;ph
+ph-plus&quot;&gt;&lt;/i&gt;Thêm&lt;/button&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                          &lt;input type=&quot;search&quot;
+id=&quot;stationSearch&quot; class=&quot;input w-full mb-4&quot;
+placeholder=&quot;Tìm theo mã hoặc tên...&quot;&gt;</p>
+<p>                          &lt;div id=&quot;stationList&quot;
+class=&quot;flex flex-col space-y-2 max-h-[70vh]
+overflow-y-auto&quot;&gt;&lt;/div&gt;</p>
+<p>                      &lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;md:col-span-2 bg-white
+p-4 rounded-lg border&quot;&gt;</p>
+<p>                          &lt;div id=&quot;stationDetailView&quot;
+class=&quot;hidden&quot;&gt;</p>
+<p>                                  &lt;div class=&quot;flex
+justify-between items-center mb-6&quot;&gt;</p>
+<p>                                      &lt;h2 class=&quot;text-lg
+font-semibold&quot;&gt;Chi tiết trạm sản xuất&lt;/h2&gt;</p>
+<p>                                      &lt;button
+id=&quot;editStationBtn&quot; class=&quot;btn primary text-sm
+!h-9&quot;&gt;&lt;i class=&quot;ph ph-pencil-simple&quot;&gt;&lt;/i&gt;Sửa&lt;/button&gt;</p>
+<p>                                  &lt;/div&gt;</p>
+<p>                                  &lt;div class=&quot;grid
+grid-cols-2 gap-4&quot;&gt;</p>
+<p>                                      &lt;div class=&quot;field&quot;&gt;&lt;p
+class=&quot;label&quot;&gt;Mã Trạm&lt;/p&gt;&lt;p
+class=&quot;font-semibold&quot; id=&quot;stationDetailId&quot;&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                                      &lt;div class=&quot;field&quot;&gt;&lt;p
+class=&quot;label&quot;&gt;Tên Trạm&lt;/p&gt;&lt;p
+class=&quot;font-semibold&quot; id=&quot;stationDetailName&quot;&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                                      &lt;div class=&quot;field&quot;&gt;&lt;p
+class=&quot;label&quot;&gt;Phân xưởng&lt;/p&gt;&lt;p
+class=&quot;font-semibold&quot; id=&quot;stationDetailWorkshop&quot;&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                                      &lt;div class=&quot;field&quot;&gt;&lt;p
+class=&quot;label&quot;&gt;Hiệu suất mục tiêu (%)&lt;/p&gt;&lt;p
+class=&quot;font-semibold&quot;
+id=&quot;stationDetailEfficiency&quot;&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                                      &lt;div class=&quot;field
+col-span-2&quot;&gt;&lt;p class=&quot;label&quot;&gt;Công suất
+(Sản phẩm / giờ)&lt;/p&gt;&lt;p class=&quot;font-semibold&quot;
+id=&quot;stationDetailCapacity&quot;&gt;&lt;/p&gt;&lt;/div&gt;</p>
+<p>                                  &lt;/div&gt;</p>
+<p>                                  &lt;div class=&quot;mt-6 pt-4
+border-t&quot;&gt;</p>
+<p>                                     &lt;h3 class=&quot;text-md
+font-semibold mb-3&quot;&gt;Lịch làm việc tiêu chuẩn&lt;/h3&gt;</p>
+<p>                                     &lt;div
+id=&quot;stationWorkSchedule&quot; class=&quot;overflow-x-auto&quot;&gt;&lt;/div&gt;</p>
+<p>                                  &lt;/div&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                          &lt;div id=&quot;stationEmptyView&quot;
+class=&quot;text-center text-gray-500 py-10&quot;&gt;&lt;p&gt;Chọn
+một trạm sản xuất để xem chi tiết.&lt;/p&gt;&lt;/div&gt;</p>
+<p>                     &lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>            &lt;div id=&quot;item-master&quot; class=&quot;page&quot;&gt;</p>
+<p>                &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-2&quot;&gt;Danh mục Hàng hóa, Vật tư&lt;/h1&gt;</p>
+<p>                &lt;p class=&quot;text-text-secondary mb-6&quot;&gt;Quản
+lý toàn bộ hàng hóa, nguyên vật liệu và thành phẩm.&lt;/p&gt;</p>
+<p>                &lt;div class=&quot;panel&quot;&gt;</p>
+<p>                    &lt;div class=&quot;grid grid-cols-1
+md:grid-cols-5 gap-4&quot;&gt;</p>
+<p>                        &lt;div class=&quot;field
+md:col-span-2&quot;&gt;&lt;label class=&quot;label&quot;&gt;Tên hàng
+hóa, vật tư&lt;/label&gt;&lt;input class=&quot;input&quot;
+placeholder=&quot;Nhập tên hoặc mã...&quot;&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Loại hàng hóa&lt;/label&gt;&lt;select
+class=&quot;select&quot;&gt;&lt;option&gt;Tất
+cả&lt;/option&gt;&lt;option&gt;Thành phẩm&lt;/option&gt;&lt;option&gt;Nguyên
+vật liệu&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Nhóm hàng hóa&lt;/label&gt;&lt;select
+class=&quot;select&quot;&gt;&lt;option&gt;Tất
+cả&lt;/option&gt;&lt;option&gt;Vật liệu kim
+loại&lt;/option&gt;&lt;option&gt;Vật liệu
+nhựa&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Trạng thái&lt;/label&gt;&lt;select
+class=&quot;select&quot;&gt;&lt;option&gt;Tất
+cả&lt;/option&gt;&lt;option&gt;Hoạt động&lt;/option&gt;&lt;option&gt;Không
+hoạt động&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p>                &lt;div class=&quot;panel !p-0&quot;&gt;</p>
+<p>                    &lt;div class=&quot;p-4 flex justify-between
+items-center&quot;&gt;</p>
+<p>                        &lt;h2 class=&quot;text-lg font-semibold
+text-text-primary&quot;&gt;Danh sách&lt;/h2&gt;</p>
+<p>                        &lt;button class=&quot;btn primary&quot;&gt;&lt;i
+class=&quot;ph ph-plus&quot;&gt;&lt;/i&gt;&lt;span&gt;Thêm
+mới&lt;/span&gt;&lt;/button&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                    &lt;div class=&quot;overflow-x-auto&quot;&gt;</p>
+<p>                        &lt;table class=&quot;w-full text-sm
+text-left&quot;&gt;</p>
+<p>                            &lt;thead class=&quot;bg-slate-50
+text-slate-600 uppercase text-xs&quot;&gt;</p>
+<p>                                &lt;tr&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold w-12 text-center&quot;&gt;STT&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Mã Hàng hóa&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Tên Hàng hóa&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Đơn vị&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Loại&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Nhóm&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-center&quot;&gt;Trạng thái&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Hành động&lt;/th&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                            &lt;/thead&gt;</p>
+<p>                            &lt;tbody class=&quot;divide-y
+divide-slate-200&quot;&gt;</p>
+<p>                                &lt;tr class=&quot;hover:bg-slate-50&quot;&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-center&quot;&gt;1&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+font-semibold text-slate-800 font-mono&quot;&gt;NVL-01&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Thép
+tấm 1.2mm&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;kg&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Nguyên
+vật liệu&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Vật
+liệu kim loại&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-center&quot;&gt;&lt;span class=&quot;status-badge green&quot;&gt;Hoạt
+động&lt;/span&gt;&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;&lt;button
+class=&quot;btn !h-8 !px-2&quot;&gt;&lt;i class=&quot;ph
+ph-pencil-simple&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                                &lt;tr class=&quot;hover:bg-slate-50&quot;&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-center&quot;&gt;2&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+font-semibold text-slate-800 font-mono&quot;&gt;SP-A&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Vỏ
+máy Standard&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Cái&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Thành
+phẩm&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Sản
+phẩm hoàn thiện&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-center&quot;&gt;&lt;span class=&quot;status-badge green&quot;&gt;Hoạt
+động&lt;/span&gt;&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;&lt;button
+class=&quot;btn !h-8 !px-2&quot;&gt;&lt;i class=&quot;ph
+ph-pencil-simple&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                                 &lt;tr class=&quot;hover:bg-slate-50&quot;&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-center&quot;&gt;3&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+font-semibold text-slate-800 font-mono&quot;&gt;NVL-02&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Sơn
+tĩnh điện Xanh&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;lít&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Nguyên
+vật liệu&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;Hóa
+chất&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-center&quot;&gt;&lt;span class=&quot;status-badge red&quot;&gt;Không
+hoạt động&lt;/span&gt;&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;&lt;button
+class=&quot;btn !h-8 !px-2&quot;&gt;&lt;i class=&quot;ph
+ph-pencil-simple&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                            &lt;/tbody&gt;</p>
+<p>                        &lt;/table&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p>            
+</p>
+<p>            &lt;div id=&quot;inventory-update&quot; class=&quot;page&quot;&gt;</p>
+<p>                &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-2&quot;&gt;Báo cáo Tồn kho&lt;/h1&gt;</p>
+<p>                &lt;p class=&quot;text-text-secondary mb-6&quot;&gt;Theo
+dõi số lượng và giá trị hàng hóa trong tất cả các
+kho.&lt;/p&gt;</p>
+<p>                &lt;div class=&quot;panel&quot;&gt;</p>
+<p>                    &lt;div class=&quot;grid grid-cols-1
+md:grid-cols-4 gap-4&quot;&gt;</p>
+<p>                        &lt;div class=&quot;field
+md:col-span-2&quot;&gt;&lt;label class=&quot;label&quot;&gt;Tìm sản
+phẩm&lt;/label&gt;&lt;input class=&quot;input&quot;
+placeholder=&quot;Nhập tên hoặc mã sản phẩm...&quot;&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Kho&lt;/label&gt;&lt;select
+class=&quot;select&quot;&gt;&lt;option&gt;Tất cả các
+kho&lt;/option&gt;&lt;option&gt;Kho Nguyên vật
+liệu&lt;/option&gt;&lt;option&gt;Kho Thành
+phẩm&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                        &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Danh mục sản phẩm&lt;/label&gt;&lt;select
+class=&quot;select&quot;&gt;&lt;option&gt;Tất
+cả&lt;/option&gt;&lt;option&gt;Vật liệu kim
+loại&lt;/option&gt;&lt;option&gt;Sản phẩm hoàn
+thiện&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p>                &lt;div class=&quot;panel !p-0&quot;&gt;</p>
+<p>                     &lt;div class=&quot;p-4 flex justify-between
+items-center&quot;&gt;</p>
+<p>                        &lt;h2 class=&quot;text-lg font-semibold
+text-text-primary&quot;&gt;Chi tiết Tồn kho&lt;/h2&gt;</p>
+<p>                        &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;</p>
+<p>                             &lt;button class=&quot;btn&quot;&gt;&lt;i
+class=&quot;ph ph-download-simple&quot;&gt;&lt;/i&gt;&lt;span&gt;Xuất
+Excel&lt;/span&gt;&lt;/button&gt;</p>
+<p>                             &lt;button class=&quot;btn
+primary&quot;&gt;&lt;i class=&quot;ph
+ph-arrows-clockwise&quot;&gt;&lt;/i&gt;&lt;span&gt;Cập
+nhật&lt;/span&gt;&lt;/button&gt;</p>
+<p>                        &lt;/div&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                    &lt;div class=&quot;overflow-x-auto&quot;&gt;</p>
+<p>                        &lt;table class=&quot;w-full text-sm
+text-left&quot;&gt;</p>
+<p>                            &lt;thead class=&quot;bg-slate-50
+text-slate-600 uppercase text-xs&quot;&gt;</p>
+<p>                                &lt;tr&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Sản phẩm&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-right&quot;&gt;Đơn giá&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-right&quot;&gt;Tổng giá trị&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-right&quot;&gt;Tồn kho&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-right&quot;&gt;Có thể dùng&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-right&quot;&gt;Đang về&lt;/th&gt;</p>
+<p>                                    &lt;th class=&quot;p-3
+font-semibold text-right&quot;&gt;Sắp đi&lt;/th&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                            &lt;/thead&gt;</p>
+<p>                             &lt;tbody class=&quot;divide-y
+divide-slate-200&quot;&gt;</p>
+<p>                                &lt;tr class=&quot;hover:bg-slate-50&quot;&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;&lt;p
+class=&quot;font-semibold text-slate-800&quot;&gt;Vỏ máy
+Standard&lt;/p&gt;&lt;p class=&quot;text-xs text-slate-500
+font-mono&quot;&gt;[SP-A]&lt;/p&gt;&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;550,000&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;82,500,000&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono font-bold text-blue-700&quot;&gt;150.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;120.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;50.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;30.00&lt;/td&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                                 &lt;tr class=&quot;hover:bg-slate-50&quot;&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;&lt;p
+class=&quot;font-semibold text-slate-800&quot;&gt;Thép tấm
+1.2mm&lt;/p&gt;&lt;p class=&quot;text-xs text-slate-500
+font-mono&quot;&gt;[NVL-01]&lt;/p&gt;&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;25,000&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;12,500,000&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono font-bold text-blue-700&quot;&gt;500.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;500.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;1000.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;0.00&lt;/td&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                                &lt;tr class=&quot;hover:bg-slate-50&quot;&gt;</p>
+<p>                                    &lt;td class=&quot;p-3&quot;&gt;&lt;p
+class=&quot;font-semibold text-slate-800&quot;&gt;Ốc M5&lt;/p&gt;&lt;p
+class=&quot;text-xs text-slate-500 font-mono&quot;&gt;[NVL-04]&lt;/p&gt;&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;200&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;2,000,000&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono font-bold text-blue-700&quot;&gt;10,000.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;8,500.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;0.00&lt;/td&gt;</p>
+<p>                                    &lt;td class=&quot;p-3
+text-right font-mono&quot;&gt;1,500.00&lt;/td&gt;</p>
+<p>                                &lt;/tr&gt;</p>
+<p>                             &lt;/tbody&gt;</p>
+<p>                        &lt;/table&gt;</p>
+<p>                    &lt;/div&gt;</p>
+<p>                &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p>            
+</p>
+<p>            &lt;div id=&quot;order-list&quot; class=&quot;page&quot;&gt;</p>
+<p>                 &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-2&quot;&gt;Lệnh sản xuất&lt;/h1&gt;</p>
+<p>                 &lt;p class=&quot;text-text-secondary mb-6&quot;&gt;Quản
+lý và theo dõi tất cả các lệnh sản xuất trong hệ
+thống.&lt;/p&gt;</p>
+<p>                
+</p>
+<p>                 &lt;div class=&quot;panel !p-0&quot;&gt;</p>
+<p>                     &lt;div class=&quot;p-4 flex justify-between
+items-center&quot;&gt;</p>
+<p>                         &lt;div class=&quot;w-full max-w-xs&quot;&gt;</p>
+<p>                             &lt;input type=&quot;search&quot;
+id=&quot;orderListSearch&quot; class=&quot;input w-full&quot;
+placeholder=&quot;Tìm theo mã lệnh, sản phẩm...&quot;&gt;</p>
+<p>                         &lt;/div&gt;</p>
+<p>                         &lt;button class=&quot;btn primary&quot;
+id=&quot;addNewOrderFromListBtn&quot;&gt;</p>
+<p>                             &lt;i class=&quot;ph ph-plus&quot;&gt;&lt;/i&gt;</p>
+<p>                             &lt;span&gt;Thêm Lệnh Mới&lt;/span&gt;</p>
+<p>                         &lt;/button&gt;</p>
+<p>                     &lt;/div&gt;</p>
+<p>                     &lt;div class=&quot;overflow-x-auto&quot;&gt;</p>
+<p>                         &lt;table class=&quot;w-full text-sm
+text-left&quot;&gt;</p>
+<p>                             &lt;thead class=&quot;bg-slate-50
+text-slate-600 uppercase text-xs&quot;&gt;</p>
+<p>                                 &lt;tr&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Mã Lệnh&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Sản phẩm&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Số lượng&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Trạm SX&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Bắt đầu&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Kết thúc&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold text-center&quot;&gt;Trạng thái&lt;/th&gt;</p>
+<p>                                     &lt;th class=&quot;p-3
+font-semibold&quot;&gt;Hành động&lt;/th&gt;</p>
+<p>                                 &lt;/tr&gt;</p>
+<p>                             &lt;/thead&gt;</p>
+<p>                             &lt;tbody id=&quot;orderListTableBody&quot;
+class=&quot;divide-y divide-slate-200&quot;&gt;</p>
+<p>                                  &lt;/tbody&gt;</p>
+<p>                         &lt;/table&gt;</p>
+<p>                     &lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>            &lt;div id=&quot;production-plan&quot; class=&quot;page&quot;&gt;</p>
+<p>                 &lt;h1 class=&quot;text-3xl font-bold
+text-text-primary mb-2&quot;&gt;Kế hoạch Sản xuất Tổng
+thể&lt;/h1&gt;</p>
+<p>                 &lt;p class=&quot;text-text-secondary mb-6&quot;&gt;Xem
+và điều chỉnh kế hoạch sản xuất cho các kỳ.&lt;/p&gt;</p>
+<p>                 &lt;div class=&quot;panel&quot;&gt;</p>
+<p>                      &lt;div class=&quot;flex flex-wrap
+items-center justify-between gap-4&quot;&gt;</p>
+<p>                          &lt;div class=&quot;flex items-center
+gap-4&quot;&gt;</p>
+<p>                              &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Kế hoạch năm&lt;/label&gt;&lt;select
+class=&quot;select w-40&quot;&gt;&lt;option&gt;Kế hoạch năm 2025
+(v1.0)&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                              &lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Trạng thái&lt;/label&gt;&lt;select
+class=&quot;select w-32&quot;&gt;&lt;option&gt;Bản
+nháp&lt;/option&gt;&lt;option&gt;Chính thức&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                          &lt;div class=&quot;flex items-center
+gap-2&quot;&gt;</p>
+<p>                               &lt;button class=&quot;btn&quot;&gt;&lt;i
+class=&quot;ph ph-download-simple&quot;&gt;&lt;/i&gt;&lt;span&gt;Tải
+xuống&lt;/span&gt;&lt;/button&gt;</p>
+<p>                               &lt;button class=&quot;btn&quot;&gt;&lt;i
+class=&quot;ph ph-upload-simple&quot;&gt;&lt;/i&gt;&lt;span&gt;Tải
+lên&lt;/span&gt;&lt;/button&gt;</p>
+<p>                               &lt;button class=&quot;btn
+primary&quot;&gt;&lt;i class=&quot;ph
+ph-floppy-disk&quot;&gt;&lt;/i&gt;&lt;span&gt;Lưu&lt;/span&gt;&lt;/button&gt;</p>
+<p>                          &lt;/div&gt;</p>
+<p>                      &lt;/div&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>                 &lt;div class=&quot;panel !p-0 overflow-x-auto&quot;&gt;</p>
+<p>                     &lt;table class=&quot;w-full text-sm
+text-left plan-table&quot;&gt;</p>
+<p>                         &lt;thead id=&quot;productionPlanThead&quot;
+class=&quot;bg-sky-800 text-white text-xs uppercase&quot;&gt;</p>
+<p>                             &lt;/thead&gt;</p>
+<p>                         &lt;tbody id=&quot;productionPlanTbody&quot;
+class=&quot;divide-y divide-slate-200&quot;&gt;</p>
+<p>                             &lt;/tbody&gt;</p>
+<p>                     &lt;/table&gt;</p>
+<p>                 &lt;/div&gt;</p>
+<p>            &lt;/div&gt;</p>
+<p>             &lt;/main&gt;</p>
+<p>    &lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>    &lt;div id=&quot;orderFormModal&quot; class=&quot;modal fixed
+inset-0 flex items-center justify-center hidden&quot;&gt;&lt;div
+class=&quot;modal-content bg-white w-full max-w-lg rounded-lg
+shadow-xl&quot;&gt;&lt;form id=&quot;orderForm&quot; class=&quot;p-6&quot;&gt;&lt;div
+class=&quot;flex justify-between items-center mb-4&quot;&gt;&lt;h2
+class=&quot;text-xl font-bold text-text-primary&quot;
+id=&quot;orderFormModalTitle&quot;&gt;&lt;/h2&gt;&lt;button
+type=&quot;button&quot; class=&quot;close-modal-btn text-gray-400
+hover:text-gray-600 text-2xl&quot;&gt;&amp;times;&lt;/button&gt;&lt;/div&gt;&lt;input
+type=&quot;hidden&quot; name=&quot;editingId&quot;&gt;&lt;div
+class=&quot;grid grid-cols-2 gap-4&quot;&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Mã
+Lệnh (LSX)&lt;/label&gt;&lt;input name=&quot;id&quot; class=&quot;input&quot;
+required&gt;&lt;/div&gt;&lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Sản phẩm&lt;/label&gt;&lt;select
+name=&quot;product&quot; class=&quot;select&quot; required
+id=&quot;form-modal-product&quot;&gt;&lt;/select&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Số
+lượng&lt;/label&gt;&lt;input name=&quot;qty&quot; type=&quot;number&quot;
+class=&quot;input&quot; required&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Trạm
+sản xuất&lt;/label&gt;&lt;select name=&quot;station&quot;
+class=&quot;select&quot; id=&quot;form-modal-station&quot;&gt;&lt;/select&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Thời
+gian bắt đầu (hh:mm)&lt;/label&gt;&lt;input name=&quot;start&quot;
+type=&quot;time&quot; class=&quot;input&quot;&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Thời
+gian kết thúc (hh:mm)&lt;/label&gt;&lt;input name=&quot;end&quot;
+type=&quot;time&quot; class=&quot;input&quot;&gt;&lt;/div&gt;&lt;div
+class=&quot;field col-span-2&quot;&gt;&lt;label class=&quot;label&quot;&gt;Trạng
+thái&lt;/label&gt;&lt;select name=&quot;status&quot;
+class=&quot;select&quot;&gt;&lt;option value=&quot;grey&quot;&gt;Chưa
+bắt đầu&lt;/option&gt;&lt;option value=&quot;blue&quot;&gt;Đang
+thực hiện&lt;/option&gt;&lt;option value=&quot;yellow&quot;&gt;Cảnh
+báo&lt;/option&gt;&lt;option value=&quot;red&quot;&gt;Chậm tiến
+độ&lt;/option&gt;&lt;option value=&quot;green&quot;&gt;Hoàn
+thành&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div class=&quot;field
+col-span-2&quot;&gt;&lt;label class=&quot;label&quot;&gt;Lý do (nếu
+có)&lt;/label&gt;&lt;input name=&quot;reason&quot;
+class=&quot;input&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div
+class=&quot;mt-6 flex justify-end space-x-3&quot;&gt;&lt;button
+type=&quot;button&quot; class=&quot;close-modal-btn
+btn&quot;&gt;Hủy&lt;/button&gt;&lt;button type=&quot;submit&quot;
+class=&quot;btn primary&quot;&gt;Lưu
+Lệnh&lt;/button&gt;&lt;/div&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p>    &lt;div id=&quot;stationFormModal&quot; class=&quot;modal
+fixed inset-0 flex items-center justify-center hidden&quot;&gt;&lt;div
+class=&quot;modal-content bg-white w-full max-w-lg rounded-lg
+shadow-xl&quot;&gt;&lt;form id=&quot;stationForm&quot;
+class=&quot;p-6&quot;&gt;&lt;div class=&quot;flex justify-between
+items-center mb-4&quot;&gt;&lt;h2 class=&quot;text-xl font-bold
+text-text-primary&quot; id=&quot;stationFormModalTitle&quot;&gt;&lt;/h2&gt;&lt;button
+type=&quot;button&quot; class=&quot;close-modal-btn text-gray-400
+hover:text-gray-600 text-2xl&quot;&gt;&amp;times;&lt;/button&gt;&lt;/div&gt;&lt;input
+type=&quot;hidden&quot; name=&quot;editingId&quot;&gt;&lt;div
+class=&quot;grid grid-cols-2 gap-4&quot;&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Mã
+Trạm&lt;/label&gt;&lt;input name=&quot;id&quot; class=&quot;input&quot;
+required&gt;&lt;/div&gt;&lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Tên Trạm&lt;/label&gt;&lt;input
+name=&quot;name&quot; class=&quot;input&quot; required&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Phân
+xưởng&lt;/label&gt;&lt;input name=&quot;workshop&quot;
+class=&quot;input&quot;&gt;&lt;/div&gt;&lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Hiệu suất mục tiêu
+(%)&lt;/label&gt;&lt;input name=&quot;efficiency&quot; type=&quot;number&quot;
+class=&quot;input&quot;&gt;&lt;/div&gt;&lt;div class=&quot;field&quot;&gt;&lt;label
+class=&quot;label&quot;&gt;Lịch làm việc&lt;/label&gt;&lt;select
+name=&quot;scheduleId&quot; class=&quot;select&quot;&gt;&lt;/select&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Công
+suất (Sản phẩm / giờ)&lt;/label&gt;&lt;input name=&quot;capacity&quot;
+type=&quot;number&quot; class=&quot;input&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div
+class=&quot;mt-6 flex justify-end space-x-3&quot;&gt;&lt;button
+type=&quot;button&quot; class=&quot;close-modal-btn
+btn&quot;&gt;Hủy&lt;/button&gt;&lt;button type=&quot;submit&quot;
+class=&quot;btn primary&quot;&gt;Lưu
+Trạm&lt;/button&gt;&lt;/div&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p>    &lt;div id=&quot;bomFormModal&quot; class=&quot;modal fixed
+inset-0 flex items-center justify-center hidden&quot;&gt;&lt;div
+class=&quot;modal-content bg-white w-full max-w-2xl rounded-lg
+shadow-xl&quot;&gt;&lt;form id=&quot;bomForm&quot; class=&quot;p-6&quot;&gt;&lt;div
+class=&quot;flex justify-between items-center mb-4&quot;&gt;&lt;h2
+class=&quot;text-xl font-bold text-text-primary&quot;
+id=&quot;bomFormModalTitle&quot;&gt;&lt;/h2&gt;&lt;button
+type=&quot;button&quot; class=&quot;close-modal-btn text-gray-400
+hover:text-gray-600 text-2xl&quot;&gt;&amp;times;&lt;/button&gt;&lt;/div&gt;&lt;input
+type=&quot;hidden&quot; name=&quot;editingCode&quot;&gt;&lt;div
+class=&quot;grid grid-cols-2 gap-4 mb-4&quot;&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Mã
+Thành phẩm&lt;/label&gt;&lt;select name=&quot;code&quot;
+class=&quot;select&quot; required&gt;&lt;/select&gt;&lt;/div&gt;&lt;div
+class=&quot;field&quot;&gt;&lt;label class=&quot;label&quot;&gt;Tên
+Thành phẩm&lt;/label&gt;&lt;input name=&quot;name&quot;
+class=&quot;input&quot; required&gt;&lt;/div&gt;&lt;/div&gt;&lt;h3
+class=&quot;font-semibold mb-2&quot;&gt;Nguyên vật liệu&lt;/h3&gt;&lt;div
+id=&quot;bom-components-container&quot; class=&quot;space-y-2
+max-h-48 overflow-y-auto p-2 border rounded-md
+bg-slate-50&quot;&gt;&lt;/div&gt;&lt;button type=&quot;button&quot;
+id=&quot;addBomComponentBtn&quot; class=&quot;btn text-sm mt-2&quot;&gt;&lt;i
+class=&quot;ph ph-plus&quot;&gt;&lt;/i&gt;Thêm NVL&lt;/button&gt;&lt;div
+class=&quot;mt-6 flex justify-end space-x-3&quot;&gt;&lt;button
+type=&quot;button&quot; class=&quot;close-modal-btn
+btn&quot;&gt;Hủy&lt;/button&gt;&lt;button type=&quot;submit&quot;
+class=&quot;btn primary&quot;&gt;Lưu
+BOM&lt;/button&gt;&lt;/div&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>    &lt;script&gt;</p>
+<p>    document.addEventListener('DOMContentLoaded', function() {</p>
+<p>        // --- DATA MODELS (EXPANDED) ---</p>
+<p>        let workingSchedules = {</p>
+<p>            'HC': { 
+</p>
+<p>                name: 'Hành chính (8h/ngày)',</p>
+<p>                periods: [</p>
+<p>                    { name: 'Ca HC Sáng', day: 'Thứ 2 - Thứ
+6', period: 'Sáng', from: '08:00', to: '12:00'},</p>
+<p>                    { name: 'Ca HC Chiều', day: 'Thứ 2 - Thứ
+6', period: 'Chiều', from: '13:00', to: '17:00'},</p>
+<p>                    { name: 'Ca T7 Sáng', day: 'Thứ 7', period:
+'Sáng', from: '08:00', to: '12:00'}</p>
+<p>                ]</p>
+<p>            },</p>
+<p>            '3CA': {</p>
+<p>                name: 'Sản xuất 3 ca (24/7)',</p>
+<p>                periods: [</p>
+<p>                    { name: 'Ca 1', day: 'Hàng ngày', period:
+'Ca 1', from: '06:00', to: '14:00' },</p>
+<p>                    { name: 'Ca 2', day: 'Hàng ngày', period:
+'Ca 2', from: '14:00', to: '22:00' },</p>
+<p>                    { name: 'Ca 3', day: 'Hàng ngày', period:
+'Ca 3', from: '22:00', to: '06:00' }</p>
+<p>                ]</p>
+<p>            }</p>
+<p>        };</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        let stationsData = [</p>
+<p>            { id:'TSX-01', name:'Trạm tiền xử lý 1',
+workshop: 'PX1', efficiency: 95, capacity: 100, scheduleId: '3CA' },</p>
+<p>            { id:'TSX-02', name:'Trạm tiền xử lý 2',
+workshop: 'PX1', efficiency: 90, capacity: 80, scheduleId: '3CA' },</p>
+<p>            { id:'TSX-03', name:'Trạm lắp ráp A', workshop:
+'PX2', efficiency: 98, capacity: 110, scheduleId: '3CA' },</p>
+<p>            { id:'TSX-04', name:'Trạm KCS', workshop: 'PX2',
+efficiency: 100, capacity: 200, scheduleId: 'HC' },</p>
+<p>            { id:'UNS-01', name:'Chưa xếp lịch', unscheduled:
+true },</p>
+<p>        ];</p>
+<p>        
+</p>
+<p>        let productsData = [</p>
+<p>            { code: 'SP-A', name: 'Vỏ máy Standard',
+components: [{code: 'NVL-01', name: 'Thép tấm 1.2mm', qty: 10,
+unit: 'kg'}, {code: 'NVL-02', name: 'Sơn tĩnh điện Xanh', qty:
+5, unit: 'lít'}] },</p>
+<p>            { code: 'SP-C', name: 'Khung máy Pro', components:
+[{code: 'NVL-03', name: 'Nhôm định hình 20x20', qty: 8, unit:
+'m'}, {code: 'NVL-04', name: 'Ốc M5', qty: 20, unit: 'cái'}] },</p>
+<p>            { code: 'SP-D', name: 'Sản phẩm D', components: []
+}, { code: 'SP-E', name: 'Sản phẩm E', components: [] },</p>
+<p>            { code: 'SP-F', name: 'Sản phẩm F', components: []
+}, { code: 'SP-G', name: 'Sản phẩm G', components: [] },</p>
+<p>        ];</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        let ordersData = [</p>
+<p>            { id:'DH-0001', station:'TSX-01', start: 7*60+30, end:
+11*60, status:'blue', product:'SP-A', qty:800 },</p>
+<p>            { id:'DH-0004', station:'TSX-02', start: 14*60, end:
+16*60, status:'red', product:'SP-C', qty:450, reason:'Thiếu NVL' },</p>
+<p>            { id:'DH-0007', station:'UNS-01', start: 0, end: 0,
+status:'grey', product:'SP-D', qty:300 },</p>
+<p>            { id:'DH-0008', station:'TSX-02', start: 9*60, end:
+12*60, status:'yellow', product:'SP-E', qty:200, reason: 'Chờ kiểm
+tra' },</p>
+<p>            { id:'DH-0009', station:'TSX-03', start: 6*60, end:
+9*60, status:'green', product:'SP-F', qty:1000 },</p>
+<p>            { id:'DH-0010', station:'TSX-01', start: 20*60, end:
+22*60, status:'grey', product:'SP-G', qty:250 },</p>
+<p>            { id:'DH-0011', station:'UNS-01', start: 0, end: 0,
+status:'grey', product:'SP-A', qty:500 },</p>
+<p>        ];</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        const fmtTime = min =&gt; min &gt; 0 ?
+`${String(Math.floor(min/60)%24).padStart(2,'0')}:${String(min%60).padStart(2,'0')}`
+: '---';</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        const planProducts = ['Bê Tông Asphalt', 'Gạch
+Terrazzo', 'Bê Tông Đúc Sẵn', 'Gạch Không Nung'];</p>
+<p>        let productionPlanData = [</p>
+<p>            { month: '01/2025', company: 'Công ty Sản xuất
+SicoX', isCollapsed: false, metrics: { 'Sản lượng kế hoạch':
+[1000, 1000, 1000, 1000], 'Tồn kho hiện tại': [200, 50, 70,
+80], 'SX dự phòng': [0, 0, 0, 0], 'Sản lượng cần sản
+xuất': [800, 950, 930, 920], } },</p>
+<p>            { month: '02/2025', company: 'Công ty Sản xuất
+SicoX', isCollapsed: true, metrics: { 'Sản lượng kế hoạch':
+[900, 900, 900, 900], 'Tồn kho hiện tại': [200, 50, 70, 80],
+'SX dự phòng': [0, 0, 0, 0], 'Sản lượng cần sản xuất':
+[700, 850, 830, 820], } },</p>
+<p>        ];</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- GLOBAL SELECTORS ---</p>
+<p>        const body = document.body;</p>
+<p>        const getEl = id =&gt; document.getElementById(id);</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- RENDER FUNCTIONS (DECLARE ALL) ---</p>
+<p>        let renderAll, renderTracksAndStations, renderUnscheduled,
+renderKanbanBoard, renderOrderList, renderProductionPlan,
+renderStationList, renderProductList, renderBomDetail;</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- NAVIGATION &amp; SIDEBAR ---</p>
+<p>        const sidebarToggle = getEl('sidebarToggle');</p>
+<p>        const navLinks =
+document.querySelectorAll('.sidebar-link');</p>
+<p>        const pages = document.querySelectorAll('.page');</p>
+<p>        const setSidebarState = (collapsed) =&gt; {</p>
+<p>            body.classList.toggle('sidebar-collapsed', collapsed);</p>
+<p>            sidebarToggle.querySelector('i').className = collapsed
+? 'ph ph-caret-double-right text-xl' : 'ph ph-caret-double-left
+text-xl';</p>
+<p>            localStorage.setItem('sidebarCollapsed', collapsed);</p>
+<p>        };</p>
+<p>        setSidebarState(localStorage.getItem('sidebarCollapsed')
+=== 'true');</p>
+<p>        sidebarToggle.addEventListener('click', () =&gt;
+setSidebarState(!body.classList.contains('sidebar-collapsed')));</p>
+<p>        navLinks.forEach(link =&gt; {</p>
+<p>            link.addEventListener('click', (e) =&gt; {</p>
+<p>                e.preventDefault();</p>
+<p>                const pageId = link.getAttribute('data-page');</p>
+<p>                pages.forEach(p =&gt;
+p.classList.remove('active'));</p>
+<p>                getEl(pageId)?.classList.add('active');</p>
+<p>                navLinks.forEach(n =&gt;
+n.classList.remove('active'));</p>
+<p>                link.classList.add('active');</p>
+<p>            });</p>
+<p>        });</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- TABBING LOGIC (SCHEDULING PAGE) ---</p>
+<p>        const tabButtons = document.querySelectorAll('#scheduling
+.tab-btn');</p>
+<p>        const scheduleViews =
+document.querySelectorAll('#scheduling .schedule-view');</p>
+<p>        tabButtons.forEach(button =&gt; {</p>
+<p>            button.addEventListener('click', () =&gt; {</p>
+<p>                const viewId = button.dataset.view;</p>
+<p>                tabButtons.forEach(btn =&gt;
+btn.classList.remove('active'));</p>
+<p>                button.classList.add('active');</p>
+<p>                scheduleViews.forEach(view =&gt; view.id ===
+viewId ? view.classList.add('active') :
+view.classList.remove('active'));</p>
+<p>            });</p>
+<p>        });</p>
+<p>        
+</p>
+<p>        // --- MODAL HANDLING ---</p>
+<p>        const openModal = (modalId) =&gt;
+getEl(modalId)?.classList.remove('hidden');</p>
+<p>        const closeModal = (modalId) =&gt;
+getEl(modalId)?.classList.add('hidden');</p>
+<p>        document.querySelectorAll('.close-modal-btn').forEach(btn
+=&gt; btn.addEventListener('click', (e) =&gt;
+e.target.closest('.modal').classList.add('hidden')));</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- GANTT CHART LOGIC ---</p>
+<p>        const tracksEl = getEl('tracks'), stationsEl =
+getEl('stations'),</p>
+<p>            timeGridEl = getEl('timeGrid'), timeHeadScrollEl =
+getEl('timeHeadScroll'),</p>
+<p>            nowMarkerEl = getEl('nowMarker'), zoomRange =
+getEl('zoom'),</p>
+<p>            unscheduledDropzone = getEl('unscheduled-dropzone');</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        const getColW = () =&gt;
+parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--col-w'));</p>
+<p>        const minutesToLeft = min =&gt; (min/60) * getColW();</p>
+<p>        const leftToMinutes = left =&gt; Math.round((left /
+getColW()) * 60);</p>
+<p>        const minutesToWidth = (start,end) =&gt; ((end-start)/60)
+* getColW();</p>
+<p>        
+</p>
+<p>        renderTracksAndStations = () =&gt; {</p>
+<p>            const scheduledStations = stationsData.filter(s =&gt;
+!s.unscheduled);</p>
+<p>            stationsEl.innerHTML = '';</p>
+<p>            tracksEl.innerHTML = '';</p>
+<p>            tracksEl.appendChild(nowMarkerEl);</p>
+<p><br/>
+<br/>
+
+</p>
+<p>            scheduledStations.forEach((station, index) =&gt; {</p>
+<p>                const stationRow = document.createElement('div');</p>
+<p>                stationRow.className = 'station';</p>
+<p>                stationRow.innerHTML = `&lt;div&gt;&lt;div
+class=&quot;font-semibold&quot;&gt;${station.name}&lt;/div&gt;&lt;div
+class=&quot;station-sub&quot;&gt;${station.workshop ||
+''}&lt;/div&gt;&lt;/div&gt;`;</p>
+<p>                stationsEl.appendChild(stationRow);</p>
+<p><br/>
+<br/>
+
+</p>
+<p>                const track = document.createElement('div');</p>
+<p>                track.className = 'track track-timeline';</p>
+<p>                track.dataset.stationId = station.id;</p>
+<p>                track.dataset.stationIndex = index;</p>
+<p>                
+</p>
+<p>                ordersData.filter(o =&gt; o.station ===
+station.id).forEach(order =&gt; {</p>
+<p>                    const bar = document.createElement('div');</p>
+<p>                    bar.className = `order ${order.status}`;</p>
+<p>                    bar.dataset.id = order.id;</p>
+<p>                    bar.style.left = minutesToLeft(order.start) +
+'px';</p>
+<p>                    bar.style.width = minutesToWidth(order.start,
+order.end) + 'px';</p>
+<p>                    bar.innerHTML = `&lt;span class=&quot;font-bold
+text-xs&quot;&gt;${order.id}&lt;/span&gt;&lt;span class=&quot;text-xs
+opacity-80&quot;&gt;${order.product}&lt;/span&gt;`;</p>
+<p>                    bar.addEventListener('click', () =&gt;
+openOrderModal(order.id));</p>
+<p>                    track.appendChild(bar);</p>
+<p>                });</p>
+<p>                tracksEl.appendChild(track);</p>
+<p>            });</p>
+<p>        };</p>
+<p>        
+</p>
+<p>        renderUnscheduled = () =&gt; {</p>
+<p>            unscheduledDropzone.innerHTML = '';</p>
+<p>            ordersData.filter(o =&gt; stationsData.find(s =&gt;
+s.id === o.station)?.unscheduled).forEach(order =&gt; {</p>
+<p>                const card = document.createElement('div');</p>
+<p>                card.className = 'p-3 bg-white rounded-md
+shadow-sm border cursor-grab';</p>
+<p>                card.dataset.id = order.id;</p>
+<p>                card.draggable = true;</p>
+<p>                card.innerHTML = `</p>
+<p>                    &lt;p class=&quot;font-semibold
+text-sm&quot;&gt;${order.id}&lt;/p&gt;</p>
+<p>                    &lt;p class=&quot;text-xs text-slate-600
+mt-1&quot;&gt;${order.product}&lt;/p&gt;</p>
+<p>                    &lt;p class=&quot;text-xs text-slate-400
+mt-2&quot;&gt;Chưa xếp lịch&lt;/p&gt;`;</p>
+<p>                card.addEventListener('click', () =&gt;
+openOrderModal(order.id));</p>
+<p>                card.addEventListener('dragstart', (e) =&gt; {</p>
+<p>                    e.dataTransfer.setData('text/plain',
+order.id);</p>
+<p>                    e.target.classList.add('dragging');</p>
+<p>                });</p>
+<p>                card.addEventListener('dragend', (e) =&gt;
+e.target.classList.remove('dragging'));</p>
+<p>                unscheduledDropzone.appendChild(card);</p>
+<p>            });</p>
+<p>        };</p>
+<p>        
+</p>
+<p>        tracksEl.addEventListener('dragover', (e) =&gt; {
+e.preventDefault(); const track =
+e.target.closest('.track-timeline'); if (track) {
+document.querySelectorAll('.track.drop-hover').forEach(t =&gt;
+t.classList.remove('drop-hover')); track.classList.add('drop-hover');
+} });</p>
+<p>        tracksEl.addEventListener('dragleave', (e) =&gt; {
+e.target.closest('.track-timeline')?.classList.remove('drop-hover');
+});</p>
+<p>        tracksEl.addEventListener('drop', (e) =&gt; {</p>
+<p>            e.preventDefault();</p>
+<p>            const track = e.target.closest('.track-timeline');</p>
+<p>            track?.classList.remove('drop-hover');</p>
+<p>            const orderId = e.dataTransfer.getData('text/plain');</p>
+<p>            const order = ordersData.find(o =&gt; o.id ===
+orderId);</p>
+<p>            if (track &amp;&amp; order) {</p>
+<p>                const stationId = track.dataset.stationId;</p>
+<p>                const rect = track.getBoundingClientRect();</p>
+<p>                const startPos = e.clientX - rect.left;</p>
+<p>                const startMin = leftToMinutes(startPos);</p>
+<p>                order.station = stationId;</p>
+<p>                order.start = startMin;</p>
+<p>                order.end = startMin + 120;</p>
+<p>                order.status = 'grey';</p>
+<p>                renderAll();</p>
+<p>            }</p>
+<p>        });</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- ORDER LIST PAGE LOGIC ---</p>
+<p>        renderOrderList = (filter = '') =&gt; {</p>
+<p>            const tableBody = getEl('orderListTableBody');</p>
+<p>            if (!tableBody) return;</p>
+<p>            tableBody.innerHTML = '';</p>
+<p>            const statusMap = { grey: { text: 'Chưa bắt đầu',
+class: 'grey' }, blue: { text: 'Đang làm', class: 'blue' }, yellow:
+{ text: 'Cảnh báo', class: 'yellow' }, red: { text: 'Chậm',
+class: 'red' }, green: { text: 'Hoàn thành', class: 'green' } };</p>
+<p>            const filteredOrders = ordersData.filter(o =&gt;
+o.id.toLowerCase().includes(filter) ||
+o.product.toLowerCase().includes(filter));</p>
+<p>            filteredOrders.forEach(order =&gt; {</p>
+<p>                const station = stationsData.find(s =&gt; s.id ===
+order.station);</p>
+<p>                let statusInfo = statusMap[order.status] || {
+text: 'Không xác định', class: 'grey' };</p>
+<p>                if (station?.unscheduled) { statusInfo = { text:
+'Chưa xếp lịch', class: 'grey' }; }</p>
+<p>                const row = `&lt;tr class=&quot;hover:bg-slate-50&quot;&gt;&lt;td
+class=&quot;p-3 font-semibold text-slate-800&quot;&gt;${order.id}&lt;/td&gt;&lt;td
+class=&quot;p-3&quot;&gt;${order.product}&lt;/td&gt;&lt;td
+class=&quot;p-3&quot;&gt;${order.qty.toLocaleString('vi-VN')}&lt;/td&gt;&lt;td
+class=&quot;p-3&quot;&gt;${station ? station.name : 'N/A'}&lt;/td&gt;&lt;td
+class=&quot;p-3 font-mono&quot;&gt;${fmtTime(order.start)}&lt;/td&gt;&lt;td
+class=&quot;p-3 font-mono&quot;&gt;${fmtTime(order.end)}&lt;/td&gt;&lt;td
+class=&quot;p-3 text-center&quot;&gt;&lt;span class=&quot;status-badge
+${statusInfo.class}&quot;&gt;${statusInfo.text}&lt;/span&gt;&lt;/td&gt;&lt;td
+class=&quot;p-3&quot;&gt;&lt;button class=&quot;btn !h-8 !px-2
+edit-order-btn&quot; data-id=&quot;${order.id}&quot;&gt;&lt;i
+class=&quot;ph ph-pencil-simple&quot;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p>                tableBody.innerHTML += row;</p>
+<p>            });</p>
+<p>           
+tableBody.querySelectorAll('.edit-order-btn').forEach(btn =&gt; {
+btn.addEventListener('click', () =&gt;
+openOrderModal(btn.dataset.id)); });</p>
+<p>        };</p>
+<p>        getEl('orderListSearch')?.addEventListener('input', e =&gt;
+renderOrderList(e.target.value.toLowerCase()));</p>
+<p>        getEl('addNewOrderFromListBtn')?.addEventListener('click',
+() =&gt; openOrderModal());</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- KANBAN BOARD LOGIC (UPDATED) ---</p>
+<p>        renderKanbanBoard = () =&gt; {</p>
+<p>            const cols = { unscheduled:
+getEl('kanban-col-unscheduled'), grey: getEl('kanban-col-grey'),
+active: getEl('kanban-col-active'), green: getEl('kanban-col-green')
+};</p>
+<p>            const counts = { unscheduled: 0, grey: 0, active: 0,
+green: 0 };</p>
+<p>            const statusConfig = {</p>
+<p>                unscheduled: { color: 'slate-300', icon: '' },</p>
+<p>                grey: { color: 'slate-500', icon: '' },</p>
+<p>                blue: { color: 'blue-600', icon: '' },</p>
+<p>                yellow: { color: 'yellow-500', icon: '&lt;i
+class=&quot;ph-fill ph-warning-circle text-yellow-500&quot;&gt;&lt;/i&gt;',
+textColor: 'text-yellow-600' },</p>
+<p>                red: { color: 'red-600', icon: '&lt;i
+class=&quot;ph-fill ph-x-circle text-red-600&quot;&gt;&lt;/i&gt;',
+textColor: 'text-red-600' },</p>
+<p>                green: { color: 'green-600', icon: '' },</p>
+<p>            };</p>
+<p>            Object.values(cols).forEach(col =&gt; { if(col)
+col.innerHTML = ''; });</p>
+<p>            
+</p>
+<p>            ordersData.forEach(order =&gt; {</p>
+<p>                const station = stationsData.find(s =&gt; s.id ===
+order.station);</p>
+<p>                let colKey, statusKey;</p>
+<p>                
+</p>
+<p>                if (station?.unscheduled) { colKey =
+'unscheduled'; statusKey = 'unscheduled'; }</p>
+<p>                else if (order.status === 'green') { colKey =
+'green'; statusKey = 'green'; }</p>
+<p>                else if (order.status === 'grey') { colKey =
+'grey'; statusKey = 'grey'; }</p>
+<p>                else { colKey = 'active'; statusKey =
+order.status; }</p>
+<p>                
+</p>
+<p>                if (!cols[colKey]) return;</p>
+<p>                counts[colKey]++;</p>
+<p>                
+</p>
+<p>                const config = statusConfig[statusKey];</p>
+<p>                let cardHtml = `</p>
+<p>                &lt;div class=&quot;p-3 bg-white rounded-md
+shadow-sm border-l-4 border-${config.color} cursor-pointer&quot;
+data-id=&quot;${order.id}&quot;&gt;</p>
+<p>                    &lt;div class=&quot;flex justify-between
+items-start&quot;&gt;</p>
+<p>                        &lt;p class=&quot;font-semibold text-sm
+text-slate-800&quot;&gt;${order.id}&lt;/p&gt;</p>
+<p>                        ${config.icon}</p>
+<p>                    &lt;/div&gt;</p>
+<p>                    &lt;p class=&quot;text-xs text-slate-600
+mt-1&quot;&gt;${order.product}&lt;/p&gt;</p>
+<p>                    &lt;p class=&quot;text-xs text-slate-400
+mt-2&quot;&gt;${station.name}&lt;/p&gt;</p>
+<p>                    ${order.reason ? `&lt;p class=&quot;text-xs
+font-semibold mt-2 ${config.textColor}&quot;&gt;${order.reason}&lt;/p&gt;`
+: ''}</p>
+<p>                &lt;/div&gt;`;</p>
+<p>                cols[colKey].innerHTML += cardHtml;</p>
+<p>            });</p>
+<p>            
+</p>
+<p>            for (const key in counts) {
+getEl(`kanban-count-${key}`).textContent = counts[key]; }</p>
+<p>            document.querySelectorAll('#kanban-view
+[data-id]').forEach(card =&gt; card.addEventListener('click', () =&gt;
+openOrderModal(card.dataset.id)));</p>
+<p>        };</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- PRODUCTION PLAN LOGIC ---</p>
+<p>        renderProductionPlan = () =&gt; {</p>
+<p>            const thead = getEl('productionPlanThead'), tbody =
+getEl('productionPlanTbody');</p>
+<p>            if (!thead || !tbody) return;</p>
+<p>            thead.innerHTML = `&lt;tr&gt;&lt;th class=&quot;w-1/4
+p-3&quot;&gt;Nội dung&lt;/th&gt;${planProducts.map(p =&gt; `&lt;th
+class=&quot;p-3 text-right&quot;&gt;${p}&lt;/th&gt;`).join('')}&lt;/tr&gt;`;</p>
+<p>            tbody.innerHTML = '';</p>
+<p>            const numFormatter = new Intl.NumberFormat('vi-VN');</p>
+<p>            productionPlanData.forEach((monthData, index) =&gt; {</p>
+<p>                tbody.innerHTML += `&lt;tr class=&quot;month-row
+bg-slate-50 font-bold ${monthData.isCollapsed ? 'collapsed' : ''}&quot;
+data-index=&quot;${index}&quot;&gt;&lt;td&gt;&lt;div class=&quot;flex
+items-center gap-2 p-3&quot;&gt;&lt;i class=&quot;ph
+ph-caret-down&quot;&gt;&lt;/i&gt;&lt;span&gt;${monthData.month}&lt;/span&gt;&lt;/div&gt;&lt;/td&gt;&lt;td
+colspan=&quot;${planProducts.length}&quot;&gt;&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p>                if (!monthData.isCollapsed) {</p>
+<p>                    tbody.innerHTML += `&lt;tr
+class=&quot;metric-row-l2
+font-semibold&quot;&gt;&lt;td&gt;${monthData.company}&lt;/td&gt;&lt;td
+colspan=&quot;${planProducts.length}&quot;&gt;&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p>                    for (const [metricName, values] of
+Object.entries(monthData.metrics)) {</p>
+<p>                        const isTotalRow = metricName === 'Sản
+lượng cần sản xuất';</p>
+<p>                        tbody.innerHTML += `&lt;tr
+class=&quot;${isTotalRow ? 'metric-row-l3 total-row' :
+'metric-row-l3'}&quot;&gt;&lt;td&gt;${metricName}&lt;/td&gt;${values.map(val
+=&gt; `&lt;td class=&quot;text-right
+font-mono&quot;&gt;${numFormatter.format(val)}&lt;/td&gt;`).join('')}&lt;/tr&gt;`;</p>
+<p>                    }</p>
+<p>                }</p>
+<p>            });</p>
+<p>        };</p>
+<p>        getEl('productionPlanTbody')?.addEventListener('click',
+(e) =&gt; {</p>
+<p>            const monthRow = e.target.closest('.month-row');</p>
+<p>            if (monthRow) { const index =
+parseInt(monthRow.dataset.index);
+productionPlanData[index].isCollapsed =
+!productionPlanData[index].isCollapsed; renderProductionPlan(); }</p>
+<p>        });</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- STATION CONFIG LOGIC (UPDATED) ---</p>
+<p>        const renderWorkSchedule = (scheduleId) =&gt; {</p>
+<p>            const schedule = workingSchedules[scheduleId];</p>
+<p>            if (!schedule) return '&lt;p class=&quot;text-sm
+text-slate-500&quot;&gt;Chưa có lịch làm việc.&lt;/p&gt;';</p>
+<p>            let tableHtml = `&lt;table class=&quot;w-full text-sm
+text-left work-schedule-table&quot;&gt;&lt;thead class=&quot;bg-slate-50
+text-xs uppercase&quot;&gt;&lt;tr&gt;&lt;th&gt;Ca&lt;/th&gt;&lt;th&gt;Thứ&lt;/th&gt;&lt;th&gt;Buổi&lt;/th&gt;&lt;th&gt;Từ
+giờ&lt;/th&gt;&lt;th&gt;Đến giờ&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;</p>
+<p>            schedule.periods.forEach(p =&gt; {</p>
+<p>                tableHtml += `&lt;tr
+class=&quot;border-b&quot;&gt;&lt;td&gt;${p.name}&lt;/td&gt;&lt;td&gt;${p.day}&lt;/td&gt;&lt;td&gt;${p.period}&lt;/td&gt;&lt;td
+class=&quot;font-mono&quot;&gt;${p.from}&lt;/td&gt;&lt;td
+class=&quot;font-mono&quot;&gt;${p.to}&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p>            });</p>
+<p>            tableHtml += '&lt;/tbody&gt;&lt;/table&gt;';</p>
+<p>            return tableHtml;</p>
+<p>        };</p>
+<p>        renderStationList = (filter = '') =&gt; {</p>
+<p>            const listEl = getEl('stationList');</p>
+<p>            if(!listEl) return;</p>
+<p>            listEl.innerHTML = stationsData</p>
+<p>                .filter(s =&gt; !s.unscheduled &amp;&amp;
+(s.id.toLowerCase().includes(filter) ||
+s.name.toLowerCase().includes(filter)))</p>
+<p>                .map(s =&gt; `&lt;div data-id=&quot;${s.id}&quot;
+class=&quot;p-3 border rounded-lg hover:bg-slate-50
+cursor-pointer&quot;&gt;&lt;p class=&quot;font-semibold
+text-sm&quot;&gt;${s.name}&lt;/p&gt;&lt;p class=&quot;text-xs
+text-slate-500&quot;&gt;${s.id} - ${s.workshop}&lt;/p&gt;&lt;/div&gt;`).join('');</p>
+<p>            
+</p>
+<p>            listEl.querySelectorAll('[data-id]').forEach(item =&gt;
+item.addEventListener('click', () =&gt; {</p>
+<p>               
+getEl('stationDetailView').classList.remove('hidden');</p>
+<p>                getEl('stationEmptyView').classList.add('hidden');</p>
+<p>                const station = stationsData.find(s =&gt; s.id ===
+item.dataset.id);</p>
+<p>                getEl('stationDetailId').textContent = station.id;</p>
+<p>                getEl('stationDetailName').textContent =
+station.name;</p>
+<p>                getEl('stationDetailWorkshop').textContent =
+station.workshop;</p>
+<p>                getEl('stationDetailEfficiency').textContent =
+station.efficiency + '%';</p>
+<p>                getEl('stationDetailCapacity').textContent =
+station.capacity + ' sp/giờ';</p>
+<p>                getEl('stationWorkSchedule').innerHTML =
+renderWorkSchedule(station.scheduleId);</p>
+<p>            }));</p>
+<p>        };</p>
+<p>        getEl('stationSearch')?.addEventListener('input', e =&gt;
+renderStationList(e.target.value.toLowerCase()));</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- BOM CONFIG LOGIC ---</p>
+<p>        renderProductList = (filter = '') =&gt; {</p>
+<p>            const listEl = getEl('productList');</p>
+<p>            if(!listEl) return;</p>
+<p>            listEl.innerHTML = productsData.filter(p =&gt;
+p.code.toLowerCase().includes(filter) ||
+p.name.toLowerCase().includes(filter)).map(p =&gt; `&lt;div
+data-code=&quot;${p.code}&quot; class=&quot;p-3 border rounded-lg
+hover:bg-slate-50 cursor-pointer&quot;&gt;&lt;p class=&quot;font-semibold
+text-sm&quot;&gt;${p.name}&lt;/p&gt;&lt;p class=&quot;text-xs
+text-slate-500&quot;&gt;${p.code}&lt;/p&gt;&lt;/div&gt;`).join('');</p>
+<p>            listEl.querySelectorAll('[data-code]').forEach(item =&gt;
+item.addEventListener('click', () =&gt;
+renderBomDetail(item.dataset.code)));</p>
+<p>        };</p>
+<p>        renderBomDetail = (productCode) =&gt; {</p>
+<p>            const product = productsData.find(p =&gt; p.code ===
+productCode);</p>
+<p>            if(!product) return;</p>
+<p>            getEl('bomDetailView').classList.remove('hidden');</p>
+<p>            getEl('bomEmptyView').classList.add('hidden');</p>
+<p>            getEl('bomProductName').textContent = product.name;</p>
+<p>            getEl('bomProductCode').textContent = product.code;</p>
+<p>            getEl('bomComponentList').innerHTML =
+product.components.map(c =&gt; `&lt;tr class=&quot;border-b&quot;&gt;&lt;td
+class=&quot;p-2&quot;&gt;${c.code}&lt;/td&gt;&lt;td
+class=&quot;p-2&quot;&gt;${c.name}&lt;/td&gt;&lt;td
+class=&quot;p-2&quot;&gt;${c.qty}&lt;/td&gt;&lt;td
+class=&quot;p-2&quot;&gt;${c.unit}&lt;/td&gt;&lt;/tr&gt;`).join('');</p>
+<p>        };</p>
+<p>        getEl('bomSearch')?.addEventListener('input', e =&gt;
+renderProductList(e.target.value.toLowerCase()));</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- ORDER FORM MODAL LOGIC ---</p>
+<p>        const openOrderModal = (orderId = null) =&gt; {</p>
+<p>            const form = getEl('orderForm'); form.reset();</p>
+<p>            const stationSelect = getEl('form-modal-station');</p>
+<p>            const productSelect = getEl('form-modal-product');</p>
+<p>            stationSelect.innerHTML = stationsData.map(s =&gt;
+`&lt;option value=&quot;${s.id}&quot;&gt;${s.name}&lt;/option&gt;`).join('');</p>
+<p>            productSelect.innerHTML = productsData.map(p =&gt;
+`&lt;option value=&quot;${p.code}&quot;&gt;${p.name}
+(${p.code})&lt;/option&gt;`).join('');</p>
+<p>            if (orderId) {</p>
+<p>                const order = ordersData.find(o =&gt; o.id ===
+orderId); if (!order) return;</p>
+<p>                getEl('orderFormModalTitle').textContent = 'Chỉnh
+sửa Lệnh Sản xuất';</p>
+<p>                form.elements.editingId.value = order.id;
+form.elements.id.value = order.id; form.elements.product.value =
+order.product; form.elements.qty.value = order.qty;</p>
+<p>                form.elements.station.value = order.station;
+form.elements.start.value = order.start &gt; 0 ? fmtTime(order.start)
+: ''; form.elements.end.value = order.end &gt; 0 ? fmtTime(order.end)
+: '';</p>
+<p>                form.elements.status.value = order.status;
+form.elements.reason.value = order.reason || '';</p>
+<p>            } else {</p>
+<p>                getEl('orderFormModalTitle').textContent = 'Thêm
+Lệnh Sản Xuất Mới';</p>
+<p>                form.elements.editingId.value = '';
+form.elements.station.value = 'UNS-01';</p>
+<p>            }</p>
+<p>            openModal('orderFormModal');</p>
+<p>        };</p>
+<p>        getEl('orderForm').addEventListener('submit', (e) =&gt; {</p>
+<p>            e.preventDefault();</p>
+<p>            const formData = new FormData(e.target);</p>
+<p>            const startVal = formData.get('start'), endVal =
+formData.get('end');</p>
+<p>            const startMin = startVal ?
+parseInt(startVal.split(':')[0])*60 +
+parseInt(startVal.split(':')[1]) : 0;</p>
+<p>            const endMin = endVal ?
+parseInt(endVal.split(':')[0])*60 + parseInt(endVal.split(':')[1]) :
+0;</p>
+<p>            const orderData = { id: formData.get('id'), product:
+formData.get('product'), qty: parseInt(formData.get('qty')), station:
+formData.get('station'), start: startMin, end: endMin, status:
+formData.get('status'), reason: formData.get('reason') };</p>
+<p>            const editingId = formData.get('editingId');</p>
+<p>            if (editingId) { const index = ordersData.findIndex(o
+=&gt; o.id === editingId); if (index !== -1) ordersData[index] =
+orderData; } 
+</p>
+<p>            else { ordersData.push(orderData); }</p>
+<p>            renderAll();</p>
+<p>            closeModal('orderFormModal');</p>
+<p>        });</p>
+<p><br/>
+<br/>
+
+</p>
+<p>        // --- DASHBOARD CHARTS ---</p>
+<p>        new
+Chart(getEl('productionByStationChart').getContext('2d'), { type:
+'bar', data: { labels: stationsData.filter(s =&gt;
+!s.unscheduled).map(s =&gt; s.name), datasets: [{ label: 'Sản
+lượng', data: [3200, 2800, 4100, 2100], backgroundColor:
+'#0D47A1', borderRadius: 4 }] }, options: { responsive: true,
+maintainAspectRatio: false, scales: { y: { beginAtZero: true } },
+plugins: { legend: { display: false } } } });</p>
+<p>        new Chart(getEl('orderStatusChart').getContext('2d'), {
+type: 'doughnut', data: { labels: ['Hoàn thành', 'Đang thực
+hiện', 'Cảnh báo', 'Chậm tiến độ', 'Chưa bắt đầu',
+'Chưa xếp lịch'], datasets: [{ data: [1, 1, 1, 1, 1, 2],
+backgroundColor: ['#16a34a', '#0D47A1', '#f59e0b', '#dc2626',
+'#64748b', '#cbd5e1'], borderWidth: 0 }] }, options: { responsive:
+true, maintainAspectRatio: false, plugins: { legend: { position:
+'bottom' } }, cutout: '70%' } });</p>
+<p>        
+</p>
+<p>        // --- INITIAL RENDER ---</p>
+<p>        renderAll = () =&gt; {</p>
+<p>            renderTracksAndStations();</p>
+<p>            renderUnscheduled();</p>
+<p>            renderKanbanBoard();</p>
+<p>            renderOrderList();</p>
+<p>            renderProductionPlan();</p>
+<p>            renderStationList();</p>
+<p>            renderProductList();</p>
+<p>        };</p>
+<p>        
+</p>
+<p>        renderAll();</p>
+<p><br/>
+<br/>
+
+</p>
+<p>    });</p>
+<p>    &lt;/script&gt;</p>
+<p>&lt;/body&gt;</p>
+<p>&lt;/html&gt;</p>
+</body>
+</html>
