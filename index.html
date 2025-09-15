@@ -641,6 +641,7 @@
         const minutesToWidth = (start,end) => ((end-start)/60) * getColW();
         
         renderTracksAndStations = () => {
+            if(!stationsEl || !tracksEl) return;
             const scheduledStations = stationsData.filter(s => !s.unscheduled);
             stationsEl.innerHTML = '';
             tracksEl.innerHTML = '';
@@ -672,6 +673,7 @@
         };
         
         renderUnscheduled = () => {
+            if(!unscheduledDropzone) return;
             unscheduledDropzone.innerHTML = '';
             ordersData.filter(o => stationsData.find(s => s.id === o.station)?.unscheduled).forEach(order => {
                 const card = document.createElement('div');
@@ -680,7 +682,7 @@
                 card.draggable = true;
                 card.innerHTML = `
                     <p class="font-semibold text-sm">${order.id}</p>
-                    <p class="text-xs text-slate-600 mt-1">${order.product}</p>
+                    <p class="text-xs text-slate-600 mt-1">${productsData.find(p=>p.code === order.product)?.name || 'N/A'}</p>
                     <p class="text-xs text-slate-400 mt-2">Chưa xếp lịch</p>`;
                 card.addEventListener('click', () => openOrderModal(order.id));
                 card.addEventListener('dragstart', (e) => {
@@ -692,9 +694,9 @@
             });
         };
         
-        tracksEl.addEventListener('dragover', (e) => { e.preventDefault(); const track = e.target.closest('.track-timeline'); if (track) { document.querySelectorAll('.track.drop-hover').forEach(t => t.classList.remove('drop-hover')); track.classList.add('drop-hover'); } });
-        tracksEl.addEventListener('dragleave', (e) => { e.target.closest('.track-timeline')?.classList.remove('drop-hover'); });
-        tracksEl.addEventListener('drop', (e) => {
+        tracksEl?.addEventListener('dragover', (e) => { e.preventDefault(); const track = e.target.closest('.track-timeline'); if (track) { document.querySelectorAll('.track.drop-hover').forEach(t => t.classList.remove('drop-hover')); track.classList.add('drop-hover'); } });
+        tracksEl?.addEventListener('dragleave', (e) => { e.target.closest('.track-timeline')?.classList.remove('drop-hover'); });
+        tracksEl?.addEventListener('drop', (e) => {
             e.preventDefault();
             const track = e.target.closest('.track-timeline');
             track?.classList.remove('drop-hover');
@@ -719,28 +721,46 @@
             if (!tableBody) return;
             tableBody.innerHTML = '';
             const statusMap = { grey: { text: 'Chưa bắt đầu', class: 'grey' }, blue: { text: 'Đang làm', class: 'blue' }, yellow: { text: 'Cảnh báo', class: 'yellow' }, red: { text: 'Chậm', class: 'red' }, green: { text: 'Hoàn thành', class: 'green' } };
-            const filteredOrders = ordersData.filter(o => o.id.toLowerCase().includes(filter) || o.product.toLowerCase().includes(filter));
+            const filteredOrders = ordersData.filter(o => o.id.toLowerCase().includes(filter) || (productsData.find(p=>p.code === o.product)?.name.toLowerCase().includes(filter)));
+            
+            if (filteredOrders.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center p-10 text-slate-500">Không tìm thấy lệnh sản xuất nào.</td></tr>`;
+                return;
+            }
+
             filteredOrders.forEach(order => {
                 const station = stationsData.find(s => s.id === order.station);
+                const product = productsData.find(p => p.code === order.product);
                 let statusInfo = statusMap[order.status] || { text: 'Không xác định', class: 'grey' };
                 if (station?.unscheduled) { statusInfo = { text: 'Chưa xếp lịch', class: 'grey' }; }
-                const row = `<tr class="hover:bg-slate-50"><td class="p-3 font-semibold text-slate-800">${order.id}</td><td class="p-3">${order.product}</td><td class="p-3">${order.qty.toLocaleString('vi-VN')}</td><td class="p-3">${station ? station.name : 'N/A'}</td><td class="p-3 font-mono">${fmtTime(order.start)}</td><td class="p-3 font-mono">${fmtTime(order.end)}</td><td class="p-3 text-center"><span class="status-badge ${statusInfo.class}">${statusInfo.text}</span></td><td class="p-3"><button class="btn !h-8 !px-2 edit-order-btn" data-id="${order.id}"><i class="ph ph-pencil-simple"></i></button></td></tr>`;
-                tableBody.innerHTML += row;
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50';
+                row.innerHTML = `
+                    <td class="p-3 font-semibold text-slate-800">${order.id}</td>
+                    <td class="p-3">${product ? product.name : 'N/A'}</td>
+                    <td class="p-3">${order.qty.toLocaleString('vi-VN')}</td>
+                    <td class="p-3">${station ? station.name : 'N/A'}</td>
+                    <td class="p-3 font-mono">${fmtTime(order.start)}</td>
+                    <td class="p-3 font-mono">${fmtTime(order.end)}</td>
+                    <td class="p-3 text-center"><span class="status-badge ${statusInfo.class}">${statusInfo.text}</span></td>
+                    <td class="p-3"><button class="btn !h-8 !px-2 edit-order-btn" data-id="${order.id}"><i class="ph ph-pencil-simple"></i></button></td>
+                `;
+                tableBody.appendChild(row);
             });
             tableBody.querySelectorAll('.edit-order-btn').forEach(btn => { btn.addEventListener('click', () => openOrderModal(btn.dataset.id)); });
         };
+        // Kích hoạt ô tìm kiếm và nút Thêm Mới cho trang Lệnh sản xuất
         getEl('orderListSearch')?.addEventListener('input', e => renderOrderList(e.target.value.toLowerCase()));
         getEl('addNewOrderFromListBtn')?.addEventListener('click', () => openOrderModal());
 
-        // --- KANBAN BOARD LOGIC (UPDATED) ---
+        // --- KANBAN BOARD LOGIC ---
         renderKanbanBoard = () => {
             const cols = { unscheduled: getEl('kanban-col-unscheduled'), grey: getEl('kanban-col-grey'), active: getEl('kanban-col-active'), green: getEl('kanban-col-green') };
+            if(!cols.unscheduled) return;
             const counts = { unscheduled: 0, grey: 0, active: 0, green: 0 };
             const statusConfig = {
-                unscheduled: { color: 'slate-300', icon: '' },
-                grey: { color: 'slate-500', icon: '' },
-                blue: { color: 'blue-600', icon: '' },
-                yellow: { color: 'yellow-500', icon: '<i class="ph-fill ph-warning-circle text-yellow-500"></i>', textColor: 'text-yellow-600' },
+                unscheduled: { color: 'slate-300', icon: '' }, grey: { color: 'slate-500', icon: '' },
+                blue: { color: 'blue-600', icon: '' }, yellow: { color: 'yellow-500', icon: '<i class="ph-fill ph-warning-circle text-yellow-500"></i>', textColor: 'text-yellow-600' },
                 red: { color: 'red-600', icon: '<i class="ph-fill ph-x-circle text-red-600"></i>', textColor: 'text-red-600' },
                 green: { color: 'green-600', icon: '' },
             };
@@ -748,6 +768,7 @@
             
             ordersData.forEach(order => {
                 const station = stationsData.find(s => s.id === order.station);
+                const product = productsData.find(p => p.code === order.product);
                 let colKey, statusKey;
                 
                 if (station?.unscheduled) { colKey = 'unscheduled'; statusKey = 'unscheduled'; }
@@ -765,7 +786,7 @@
                         <p class="font-semibold text-sm text-slate-800">${order.id}</p>
                         ${config.icon}
                     </div>
-                    <p class="text-xs text-slate-600 mt-1">${productsData.find(p => p.code === order.product)?.name || 'N/A'}</p>
+                    <p class="text-xs text-slate-600 mt-1">${product ? product.name : 'N/A'}</p>
                     <p class="text-xs text-slate-400 mt-2">${station.name}</p>
                     ${order.reason ? `<p class="text-xs font-semibold mt-2 ${config.textColor}">${order.reason}</p>` : ''}
                 </div>`;
@@ -799,7 +820,7 @@
             if (monthRow) { const index = parseInt(monthRow.dataset.index); productionPlanData[index].isCollapsed = !productionPlanData[index].isCollapsed; renderProductionPlan(); }
         });
 
-        // --- STATION CONFIG LOGIC (UPDATED) ---
+        // --- STATION CONFIG LOGIC ---
         const renderWorkSchedule = (scheduleId) => {
             const schedule = workingSchedules[scheduleId];
             if (!schedule) return '<p class="text-sm text-slate-500">Chưa có lịch làm việc.</p>';
@@ -883,8 +904,12 @@
         });
 
         // --- DASHBOARD CHARTS ---
-        new Chart(getEl('productionByStationChart').getContext('2d'), { type: 'bar', data: { labels: stationsData.filter(s => !s.unscheduled).map(s => s.name), datasets: [{ label: 'Sản lượng', data: [3200, 2800, 4100, 2100], backgroundColor: '#0D47A1', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
-        new Chart(getEl('orderStatusChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Hoàn thành', 'Đang thực hiện', 'Cảnh báo', 'Chậm tiến độ', 'Chưa bắt đầu', 'Chưa xếp lịch'], datasets: [{ data: [1, 1, 1, 1, 1, 2], backgroundColor: ['#16a34a', '#0D47A1', '#f59e0b', '#dc2626', '#64748b', '#cbd5e1'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, cutout: '70%' } });
+        if(getEl('productionByStationChart')) {
+            new Chart(getEl('productionByStationChart').getContext('2d'), { type: 'bar', data: { labels: stationsData.filter(s => !s.unscheduled).map(s => s.name), datasets: [{ label: 'Sản lượng', data: [3200, 2800, 4100, 2100], backgroundColor: '#0D47A1', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } } });
+        }
+        if(getEl('orderStatusChart')) {
+            new Chart(getEl('orderStatusChart').getContext('2d'), { type: 'doughnut', data: { labels: ['Hoàn thành', 'Đang thực hiện', 'Cảnh báo', 'Chậm tiến độ', 'Chưa bắt đầu', 'Chưa xếp lịch'], datasets: [{ data: [1, 1, 1, 1, 1, 2], backgroundColor: ['#16a34a', '#0D47A1', '#f59e0b', '#dc2626', '#64748b', '#cbd5e1'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, cutout: '70%' } });
+        }
         
         // --- INITIAL RENDER ---
         renderAll = () => {
@@ -896,6 +921,16 @@
             renderStationList();
             renderProductList();
         };
+        
+        // Tự động set ngày hôm nay cho ô chọn ngày trên màn hình Lập lịch
+        const dateInput = getEl('dateHead');
+        if (dateInput) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dateInput.value = `${year}-${month}-${day}`;
+        }
         
         renderAll();
     });
